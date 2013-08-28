@@ -1,0 +1,5 @@
+youdao
+======
+sudo apt-get install python-dev xsel
+sudo pip install -i http://pypi.douban.com/simple/ peewee Scrapy
+python word_selected.py
