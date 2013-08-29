@@ -9,3 +9,8 @@ class Item(peewee.Model):
     class Meta:
         database = peewee.SqliteDatabase('webyoudao.db')
 
+    def getattr(self, attr):
+        return object.__getattribute__(self, attr)
+
+    def setattr(self, attr, value):
+        object.__setattr__(self, attr, value)
