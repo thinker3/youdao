@@ -4,6 +4,7 @@ from youdao import query_web
 from keylogger import fetch_keys
 import peewee
 from models import Item
+from Tkinter import Tk, Label
 
 p = re.compile(r'[^a-zA-Z]')
 last = ''
@@ -49,7 +50,7 @@ def search(word):
         if item_dict:
             item = save(item_dict)
     if item:
-        show(item)
+        show_in_gui(item)
 
 def save(item_dict):
     item = Item.create(**item_dict)
@@ -62,4 +63,34 @@ def show(item):
     print item.example
 
 
+def App(root):
+    label_name = Label(root, text='')
+    label_name.pack()
+
+    label_phonetic = Label(root, text='')
+    label_phonetic.pack()
+
+    label_meaning = Label(root, text='')
+    label_meaning.pack()
+
+    label_example = Label(root, text='')
+    label_example.pack()
+    labels = {}
+    labels['name'] = label_name
+    labels['phonetic'] = label_phonetic
+    labels['meaning'] = label_meaning
+    labels['example'] = label_example
+    return labels
+
+def show_in_gui(item):
+    global labels
+    for one in labels:
+        labels[one].__setitem__('text', item.getattr(one))
+        labels[one].pack()
+
+
+#if __name__ == '__main__':
+root = Tk()
+labels = App(root)
+root.mainloop()
 log(ctrl_pressed)
