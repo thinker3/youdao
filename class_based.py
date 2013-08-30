@@ -81,6 +81,12 @@ class GUI():
     def __init__(self, holmes):
         self.holmes = holmes
         self.root = Tk()
+        self.root.title("Press ctrl to search seleted word")
+        screen_width = self.root.winfo_screenwidth()
+        screen_height = self.root.winfo_screenheight()
+        self.root.geometry("550x250+%d+%d" % (screen_width/2-275, screen_height/2-125))
+        self.root.protocol("WM_DELETE_WINDOW", self.close_handler)
+
 
     def close_handler(self):
         self.holmes.relax()
@@ -101,15 +107,8 @@ class GUI():
         self.labels['meaning'] = label_meaning
         self.labels['example'] = label_example
 
-    def prepare(self):
-        self.init_labels()
-        screen_width = self.root.winfo_screenwidth()
-        screen_height = self.root.winfo_screenheight()
-        self.root.geometry("550x250+%d+%d" % (screen_width/2-275, screen_height/2-125))
-        self.root.protocol("WM_DELETE_WINDOW", self.close_handler)
-
     def appear(self):
-        self.prepare()
+        self.init_labels()
         self.holmes.detect(self.root, self.labels)
         self.root.mainloop()
 
