@@ -67,7 +67,7 @@ class App(threading.Thread):
     def run(self):
         self.log(self.callback)
 
-def get_lables(root):
+def get_labels(root):
     label_name = Label(root, text='')
     label_name.pack()
 
@@ -103,7 +103,7 @@ def show_in_gui(item):
 
 #if __name__ == '__main__':
 root = Tk()
-labels = get_lables(root)
+labels = get_labels(root)
 screen_width = root.winfo_screenwidth()
 screen_height = root.winfo_screenheight()
 root.geometry("550x250+%d+%d" % (screen_width/2-275, screen_height/2-125))
