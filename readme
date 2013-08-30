@@ -5,3 +5,5 @@ sudo pip install -i http://pypi.douban.com/simple/ peewee Scrapy
 python word_selected.py
 or
 python gui.py &
+or
+python class_based.py &
