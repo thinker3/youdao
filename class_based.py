@@ -28,7 +28,7 @@ class Detector(threading.Thread):
         self.labels = labels
         self.start()
 
-    def relax(self):
+    def recess(self):
         self.running = False
 
     def query_db(self, word):
@@ -94,7 +94,7 @@ class GUI():
 
     def close_handler(self):
         self.root.iconify()
-        self.holmes.relax()
+        self.holmes.recess()
         self.root.quit()
 
     def init_labels(self):
