@@ -73,7 +73,7 @@ class Detector(threading.Thread):
         for one in self.labels:
             self.labels[one].__setitem__('text', self.item.getattr(one))
             self.labels[one].pack()
-        self.root.wm_state('normal')
+        self.root.deiconify()
         self.root.call('wm', 'attributes', '.', '-topmost', True)
         self.root.after_idle(self.root.call, 'wm', 'attributes', '.', '-topmost', False)
         self.root.focus_force()
@@ -90,6 +90,7 @@ class GUI():
 
 
     def close_handler(self):
+        self.root.iconify()
         self.holmes.relax()
         self.root.quit()
 

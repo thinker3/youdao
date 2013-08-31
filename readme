@@ -7,3 +7,5 @@ or
 python gui.py &
 or
 python class_based.py &
+
+gui pops up when ctrl pressed if not minimized.
