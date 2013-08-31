@@ -39,7 +39,10 @@ class Detector(threading.Thread):
         self.item = item
 
     def save(self, item_dict):
-        self.item = Item.create(**item_dict)
+        if item_dict['example']:
+            self.item = Item.create(**item_dict)
+        else:
+            self.item = Item(**item_dict)
 
     def search(self, word):
         word = word.lower()
