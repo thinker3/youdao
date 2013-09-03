@@ -18,8 +18,13 @@ class GUI(QtGui.QWidget, threading.Thread):
     def __init__(self):
         threading.Thread.__init__(self)
         QtGui.QWidget.__init__(self)
+        self.setFocusPolicy(QtCore.Qt.StrongFocus)
         self.start()
         self.initUI()
+
+    def closeEvent(self, event):
+        self.running = False
+        event.accept()
 
     def initUI(self):
         self.nameL = QtGui.QLabel('')
@@ -44,7 +49,11 @@ class GUI(QtGui.QWidget, threading.Thread):
         #self.meaning.setText(self.item.meaning)
         #self.example.setText(self.item.example)
         if self.windowState() != Qt.WindowMinimized:
-            self.setWindowState(Qt.WindowActive)
+            print 'here'
+            #self.setWindowState(Qt.WindowActive)
+            self.setWindowState(self.windowState() & ~QtCore.Qt.WindowMinimized | QtCore.Qt.WindowActive)
+            self.activateWindow()
+
 
     def run(self):
         while self.running:
