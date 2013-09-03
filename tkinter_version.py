@@ -60,8 +60,6 @@ class GUI(threading.Thread):
         self.root.deiconify()
         self.root.attributes('-topmost', 1)
         self.root.attributes('-topmost', 0)
-        #self.root.call('wm', 'attributes', '.', '-topmost', True)
-        #self.root.after_idle(self.root.call, 'wm', 'attributes', '.', '-topmost', False)
         self.root.focus_force()
 
     def run(self):

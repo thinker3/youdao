@@ -54,7 +54,6 @@ class GUI(QtGui.QWidget, threading.Thread):
             self.setWindowState(self.windowState() & ~QtCore.Qt.WindowMinimized | QtCore.Qt.WindowActive)
             self.activateWindow()
 
-
     def run(self):
         while self.running:
             sleep(self.sleep_interval)
