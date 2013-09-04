@@ -7,5 +7,7 @@ or
 python gui.py &
 or
 python class_based.py &
+or
+python tkinter_version.py &
 
 gui pops up when ctrl pressed if not minimized.
