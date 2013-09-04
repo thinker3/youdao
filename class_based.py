@@ -88,7 +88,11 @@ class GUI():
         self.root.title("Press ctrl to search seleted word")
         screen_width = self.root.winfo_screenwidth()
         screen_height = self.root.winfo_screenheight()
-        self.root.geometry("550x250+%d+%d" % (screen_width/2-275, screen_height/2-125))
+        width = screen_width*0.4
+        height = screen_height*0.4
+        left = 400
+        right = 200
+        self.root.geometry("%dx%d+%d+%d" % (width,height,left,right))
         self.root.protocol("WM_DELETE_WINDOW", self.close_handler)
 
 
