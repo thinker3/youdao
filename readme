@@ -1,5 +1,6 @@
-youdao
+youdao_like
 ======
+
 sudo apt-get install python-dev xsel python-tk
 sudo pip install -i http://pypi.douban.com/simple/ peewee Scrapy
 python word_selected.py
@@ -9,5 +10,7 @@ or
 python class_based.py &
 or
 python tkinter_version.py &
+or
+python my_youdao.py & # best until now
 
 gui pops up when ctrl pressed if not minimized.
