@@ -8,6 +8,8 @@ from models import Item
 from utils import init_list, save_list
 from Tkinter import Tk, Label, Toplevel, Frame
 from Tkinter import *
+import tkMessageBox
+from tkMessageBox import *
 
 class Recite(object):
     def __init__(self, master):
@@ -52,9 +54,11 @@ class Recite(object):
         if name == self.item.name:
             self.item.score += 1
             self.rearrange(1)
+            showinfo('Result', "Right, good!", parent=self.frame)
         else:
             self.item.score -= 1
             self.rearrange(0)
+            showinfo('Result', "Sorry, wrong!", parent=self.frame)
         self.run()
 
     def show_phonetic(self):
@@ -64,6 +68,7 @@ class Recite(object):
     def run(self):
         item = self.words[0]
         self.name_string.set('')
+        self.entry_name.focus()
         self.btn_show_phonetic.config(state=NORMAL)
         self.area_meaning.delete('1.0', END)
         self.area_meaning.insert(INSERT, item.meaning)

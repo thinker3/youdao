@@ -1,52 +1,5 @@
 <wordbook>
   <item>
-    <name>directory</name>
-    <phonetic><![CDATA[[dɪ'rekt(ə)rɪ; daɪ-][daɪ'rɛktəri]]]></phonetic>
-    <meaning><![CDATA[n. [计] 目录；工商名录；姓名地址录
-adj. 指导的；咨询的]]></meaning>
-    <example><![CDATA[Think of it like a directory within a file system.
-可以将它想象为文件系统内的一个目录。
-Examine this directory to debug problems, or to see the status of activation.
-检查这个目录以调试相关的问题，或者查看激活的状态。
-However, as soon as you do that, the directory itself and all its subdirectories pop right back up again.
-但在您删除后，目录本身及其所有子目录又会立即出现在原来的位置。]]></example>
-    <score>-1</score>
-    <create_time>2013-09-08 17:50:42</create_time>
-    <access_time>2013-09-08 18:40:51</access_time>
-  </item>
-  <item>
-    <name>branch</name>
-    <phonetic><![CDATA[[brɑːn(t)ʃ][bræntʃ]]]></phonetic>
-    <meaning><![CDATA[vt. 分支；出现分歧
-vi. 分支；出现分歧
-n. 树枝，分枝；分部；支流]]></meaning>
-    <example><![CDATA[He rived a branch away from the tree.
-他从这棵树上扯下一根树枝。
-The branch was snapped off by something.
-树枝被什么东西给压断了。
-They have decided to close that branch down.
-他们决定把那个分公司关了。]]></example>
-    <score>3</score>
-    <create_time>2013-09-08 17:50:26</create_time>
-    <access_time>2013-09-08 18:40:54</access_time>
-  </item>
-  <item>
-    <name>name</name>
-    <phonetic><![CDATA[[neɪm][nem]]]></phonetic>
-    <meaning><![CDATA[n. 名称，名字；姓名；名誉
-vt. 命名，任命；指定；称呼；提名；叫出
-adj. 姓名的；据以取名的]]></meaning>
-    <example><![CDATA[Please erase my name from the list.
-请把我的名字从名单上擦去。
-He stroked the name of himself with his pen.
-他用钢笔划掉了他自己的名字。
-They have lined through his name in the membership list.
-他们已经在会员名单上划掉了他的名字。]]></example>
-    <score>3</score>
-    <create_time>2013-09-07 21:32:09</create_time>
-    <access_time>2013-09-08 18:40:56</access_time>
-  </item>
-  <item>
     <name>global</name>
     <phonetic><![CDATA[['gləʊb(ə)l]['ɡlobl]]]></phonetic>
     <meaning><![CDATA[adj. 全球的；总体的；球形的]]></meaning>
@@ -56,9 +9,23 @@ In his model, this would have only modest effects on global welfare; but how con
 在他的模型中，这只会对全球的福利产生些许影响；但我们对之能够相信多少？
 These achievements show the power of determination and global solidarity, but they also remind us of the challenges.
 这些成就显示了决心和全球团结的力量，但它们还提醒我们关注种种挑战。]]></example>
-    <score>3</score>
+    <score>4</score>
     <create_time>2013-09-07 21:32:05</create_time>
-    <access_time>2013-09-08 18:40:59</access_time>
+    <access_time>2013-09-08 19:58:30</access_time>
+  </item>
+  <item>
+    <name>lithuania</name>
+    <phonetic><![CDATA[[ˌlɪθuˈeɪniə]]]></phonetic>
+    <meaning><![CDATA[n. 立陶宛]]></meaning>
+    <example><![CDATA[The castle was first mentioned in 1327 and was believed to be located at the border of Poland and Lithuania.
+人们最先提到城堡是在1327年，那时认为它位于波兰和立陶宛的交界处。
+"If this is true, Lithuania has to clean up, accept responsibility, apologise, and promise that it will never happen again, " she said.
+“如果是真的，立陶宛将必须进行清理、承担责任、做出道歉并承诺再也不会发生这种事，”她说。
+Latvia, Lithuania and Estonia reached an agreement with NATO on the lease of fighters to patrol their airspace in 2004.
+拉脱维亚、立陶宛和爱沙尼亚在2004年与北约达成协议达成了租赁战机对他们的领空巡逻。]]></example>
+    <score>0</score>
+    <create_time>2013-09-08 19:06:42</create_time>
+    <access_time>2013-09-08 19:58:47</access_time>
   </item>
   <item>
     <name>module</name>
@@ -70,9 +37,9 @@ In this step, you create a new module for the selector.
 在此步骤中，您将为选择器创建一个新的模块。
 You then iterate the modules that depended on you and remove this module from their lists.
 然后迭代具有依赖性的模块，并将这个模块从这些列表中删除。]]></example>
-    <score>3</score>
+    <score>4</score>
     <create_time>2013-09-07 21:31:32</create_time>
-    <access_time>2013-09-08 18:41:03</access_time>
+    <access_time>2013-09-08 19:58:59</access_time>
   </item>
   <item>
     <name>thing</name>
@@ -84,9 +51,24 @@ I will do any thing to happify you.
 为了让你高兴我愿做任何事情。
 This wooden thing is for beating the eggs.
 这个木制的东西是用来打鸡蛋的。]]></example>
-    <score>3</score>
+    <score>4</score>
     <create_time>2013-09-07 21:31:27</create_time>
-    <access_time>2013-09-08 18:41:08</access_time>
+    <access_time>2013-09-08 19:59:03</access_time>
+  </item>
+  <item>
+    <name>directory</name>
+    <phonetic><![CDATA[[dɪ'rekt(ə)rɪ; daɪ-][daɪ'rɛktəri]]]></phonetic>
+    <meaning><![CDATA[n. [计] 目录；工商名录；姓名地址录
+adj. 指导的；咨询的]]></meaning>
+    <example><![CDATA[Think of it like a directory within a file system.
+可以将它想象为文件系统内的一个目录。
+Examine this directory to debug problems, or to see the status of activation.
+检查这个目录以调试相关的问题，或者查看激活的状态。
+However, as soon as you do that, the directory itself and all its subdirectories pop right back up again.
+但在您删除后，目录本身及其所有子目录又会立即出现在原来的位置。]]></example>
+    <score>0</score>
+    <create_time>2013-09-08 17:50:42</create_time>
+    <access_time>2013-09-08 19:59:09</access_time>
   </item>
   <item>
     <name>you</name>
@@ -98,9 +80,9 @@ You have to consider what to do next.
 你必须考虑下一步该做什么。
 Do what I tell you.
 按照我告诉你的去做。]]></example>
-    <score>3</score>
+    <score>4</score>
     <create_time>2013-09-07 21:30:01</create_time>
-    <access_time>2013-09-08 18:41:10</access_time>
+    <access_time>2013-09-08 19:59:14</access_time>
   </item>
   <item>
     <name>commit</name>
@@ -112,9 +94,9 @@ But you cannot hope to master anything unless you commit to mastery of one thing
 但除非你承诺要掌握某事，否则就永远没有希望掌握任何事。
 So many children who commit violent crimes have themselves been brutalized by years of abuse and neglect.
 那么多犯暴力罪行的孩子们由于多年受到的虐待和忽视使他们自己残酷无情。]]></example>
-    <score>3</score>
+    <score>4</score>
     <create_time>2013-09-07 20:31:37</create_time>
-    <access_time>2013-09-08 18:41:12</access_time>
+    <access_time>2013-09-08 19:59:17</access_time>
   </item>
   <item>
     <name>what</name>
@@ -129,9 +111,9 @@ What time do you have to go in tomorrow?
 你明天什么时候必须开始照常工作?
 What an inspiration she was to all around her!
 她对于她周围所有的人是一种多么大的鼓舞!]]></example>
-    <score>3</score>
+    <score>4</score>
     <create_time>2013-09-08 17:50:48</create_time>
-    <access_time>2013-09-08 18:41:14</access_time>
+    <access_time>2013-09-08 19:59:20</access_time>
   </item>
   <item>
     <name>update</name>
@@ -144,9 +126,25 @@ In this case, it would store its decisions, and then update the array of nodes a
 在这种情况下，它将存储它的判定，然后在最后一个判定做出后更新数组的节点。
 We use the update site in this example.
 在本例中，我们将使用更新站点。]]></example>
-    <score>3</score>
+    <score>4</score>
     <create_time>2013-09-08 17:50:53</create_time>
-    <access_time>2013-09-08 18:41:18</access_time>
+    <access_time>2013-09-08 20:03:12</access_time>
+  </item>
+  <item>
+    <name>branch</name>
+    <phonetic><![CDATA[[brɑːn(t)ʃ][bræntʃ]]]></phonetic>
+    <meaning><![CDATA[vt. 分支；出现分歧
+vi. 分支；出现分歧
+n. 树枝，分枝；分部；支流]]></meaning>
+    <example><![CDATA[He rived a branch away from the tree.
+他从这棵树上扯下一根树枝。
+The branch was snapped off by something.
+树枝被什么东西给压断了。
+They have decided to close that branch down.
+他们决定把那个分公司关了。]]></example>
+    <score>4</score>
+    <create_time>2013-09-08 17:50:26</create_time>
+    <access_time>2013-09-08 20:03:40</access_time>
   </item>
   <item>
     <name>master</name>
@@ -160,8 +158,24 @@ If only I could be master of this subject.
 我多么希望能精通这门学科。
 The dog has transferred its affection to its new master.
 那狗已把它的感情转移到新主人身上。]]></example>
-    <score>4</score>
+    <score>5</score>
     <create_time>2013-09-08 17:50:29</create_time>
-    <access_time>2013-09-08 18:41:22</access_time>
+    <access_time>2013-09-08 20:03:46</access_time>
+  </item>
+  <item>
+    <name>name</name>
+    <phonetic><![CDATA[[neɪm][nem]]]></phonetic>
+    <meaning><![CDATA[n. 名称，名字；姓名；名誉
+vt. 命名，任命；指定；称呼；提名；叫出
+adj. 姓名的；据以取名的]]></meaning>
+    <example><![CDATA[Please erase my name from the list.
+请把我的名字从名单上擦去。
+He stroked the name of himself with his pen.
+他用钢笔划掉了他自己的名字。
+They have lined through his name in the membership list.
+他们已经在会员名单上划掉了他的名字。]]></example>
+    <score>5</score>
+    <create_time>2013-09-07 21:32:09</create_time>
+    <access_time>2013-09-08 20:04:01</access_time>
   </item>
 </wordbook>
