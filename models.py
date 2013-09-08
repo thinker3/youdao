@@ -20,12 +20,22 @@ class Item(peewee.Model):
         return XmlItem(self.name, self.meaning, self.phonetic, self.example)
 
 class XmlItem(object):
-    def __init__(self, name, meaning, phonetic='', example='', score=0, create_time=None, modify_time=None, access_time=None):
+    def __init__(self, name, meaning, phonetic='', example='', score=0, create_time=None, access_time=None):
         self.name = name.strip()
         self.meaning = meaning.strip()
         self.phonetic = phonetic.strip()
         self.example = example.strip()
         self.score = score
         self.create_time = create_time if create_time else datetime.now()
-        self.modify_time = modify_time if modify_time else datetime.now()
         self.access_time = access_time if access_time else datetime.now()
+
+    def update_access_time(self):
+        self.access_time = datetime.now()
+
+
+
+
+
+
+
+

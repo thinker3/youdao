@@ -1,5 +1,36 @@
 <wordbook>
   <item>
+    <name>directory</name>
+    <phonetic><![CDATA[[dɪ'rekt(ə)rɪ; daɪ-][daɪ'rɛktəri]]]></phonetic>
+    <meaning><![CDATA[n. [计] 目录；工商名录；姓名地址录
+adj. 指导的；咨询的]]></meaning>
+    <example><![CDATA[Think of it like a directory within a file system.
+可以将它想象为文件系统内的一个目录。
+Examine this directory to debug problems, or to see the status of activation.
+检查这个目录以调试相关的问题，或者查看激活的状态。
+However, as soon as you do that, the directory itself and all its subdirectories pop right back up again.
+但在您删除后，目录本身及其所有子目录又会立即出现在原来的位置。]]></example>
+    <score>-1</score>
+    <create_time>2013-09-08 17:50:42</create_time>
+    <access_time>2013-09-08 18:40:51</access_time>
+  </item>
+  <item>
+    <name>branch</name>
+    <phonetic><![CDATA[[brɑːn(t)ʃ][bræntʃ]]]></phonetic>
+    <meaning><![CDATA[vt. 分支；出现分歧
+vi. 分支；出现分歧
+n. 树枝，分枝；分部；支流]]></meaning>
+    <example><![CDATA[He rived a branch away from the tree.
+他从这棵树上扯下一根树枝。
+The branch was snapped off by something.
+树枝被什么东西给压断了。
+They have decided to close that branch down.
+他们决定把那个分公司关了。]]></example>
+    <score>3</score>
+    <create_time>2013-09-08 17:50:26</create_time>
+    <access_time>2013-09-08 18:40:54</access_time>
+  </item>
+  <item>
     <name>name</name>
     <phonetic><![CDATA[[neɪm][nem]]]></phonetic>
     <meaning><![CDATA[n. 名称，名字；姓名；名誉
@@ -11,10 +42,9 @@ He stroked the name of himself with his pen.
 他用钢笔划掉了他自己的名字。
 They have lined through his name in the membership list.
 他们已经在会员名单上划掉了他的名字。]]></example>
-    <score>0</score>
+    <score>3</score>
     <create_time>2013-09-07 21:32:09</create_time>
-    <modify_time>2013-09-07 21:32:09</modify_time>
-    <access_time>2013-09-07 21:32:09</access_time>
+    <access_time>2013-09-08 18:40:56</access_time>
   </item>
   <item>
     <name>global</name>
@@ -26,10 +56,9 @@ In his model, this would have only modest effects on global welfare; but how con
 在他的模型中，这只会对全球的福利产生些许影响；但我们对之能够相信多少？
 These achievements show the power of determination and global solidarity, but they also remind us of the challenges.
 这些成就显示了决心和全球团结的力量，但它们还提醒我们关注种种挑战。]]></example>
-    <score>0</score>
+    <score>3</score>
     <create_time>2013-09-07 21:32:05</create_time>
-    <modify_time>2013-09-07 21:32:05</modify_time>
-    <access_time>2013-09-07 21:32:05</access_time>
+    <access_time>2013-09-08 18:40:59</access_time>
   </item>
   <item>
     <name>module</name>
@@ -41,10 +70,9 @@ In this step, you create a new module for the selector.
 在此步骤中，您将为选择器创建一个新的模块。
 You then iterate the modules that depended on you and remove this module from their lists.
 然后迭代具有依赖性的模块，并将这个模块从这些列表中删除。]]></example>
-    <score>0</score>
+    <score>3</score>
     <create_time>2013-09-07 21:31:32</create_time>
-    <modify_time>2013-09-07 21:31:32</modify_time>
-    <access_time>2013-09-07 21:31:32</access_time>
+    <access_time>2013-09-08 18:41:03</access_time>
   </item>
   <item>
     <name>thing</name>
@@ -56,10 +84,9 @@ I will do any thing to happify you.
 为了让你高兴我愿做任何事情。
 This wooden thing is for beating the eggs.
 这个木制的东西是用来打鸡蛋的。]]></example>
-    <score>0</score>
+    <score>3</score>
     <create_time>2013-09-07 21:31:27</create_time>
-    <modify_time>2013-09-07 21:31:27</modify_time>
-    <access_time>2013-09-07 21:31:27</access_time>
+    <access_time>2013-09-08 18:41:08</access_time>
   </item>
   <item>
     <name>you</name>
@@ -71,10 +98,9 @@ You have to consider what to do next.
 你必须考虑下一步该做什么。
 Do what I tell you.
 按照我告诉你的去做。]]></example>
-    <score>0</score>
+    <score>3</score>
     <create_time>2013-09-07 21:30:01</create_time>
-    <modify_time>2013-09-07 21:30:01</modify_time>
-    <access_time>2013-09-07 21:30:01</access_time>
+    <access_time>2013-09-08 18:41:10</access_time>
   </item>
   <item>
     <name>commit</name>
@@ -86,9 +112,56 @@ But you cannot hope to master anything unless you commit to mastery of one thing
 但除非你承诺要掌握某事，否则就永远没有希望掌握任何事。
 So many children who commit violent crimes have themselves been brutalized by years of abuse and neglect.
 那么多犯暴力罪行的孩子们由于多年受到的虐待和忽视使他们自己残酷无情。]]></example>
-    <score>0</score>
+    <score>3</score>
     <create_time>2013-09-07 20:31:37</create_time>
-    <modify_time>2013-09-07 20:31:37</modify_time>
-    <access_time>2013-09-07 20:31:37</access_time>
+    <access_time>2013-09-08 18:41:12</access_time>
+  </item>
+  <item>
+    <name>what</name>
+    <phonetic><![CDATA[[wɒt][wɑt]]]></phonetic>
+    <meaning><![CDATA[pron. 什么；多么；多少
+adj. 什么；多么；何等
+adv. 到什么程度，在哪一方面
+int. 什么；多么]]></meaning>
+    <example><![CDATA[What can I do for you?
+我能帮你什么忙吗?
+What time do you have to go in tomorrow?
+你明天什么时候必须开始照常工作?
+What an inspiration she was to all around her!
+她对于她周围所有的人是一种多么大的鼓舞!]]></example>
+    <score>3</score>
+    <create_time>2013-09-08 17:50:48</create_time>
+    <access_time>2013-09-08 18:41:14</access_time>
+  </item>
+  <item>
+    <name>update</name>
+    <phonetic><![CDATA[[ʌp'deɪt][,ʌp'det]]]></phonetic>
+    <meaning><![CDATA[vt. 更新；校正，修正；使现代化
+n. 更新；现代化]]></meaning>
+    <example><![CDATA[Do you have the update yet?
+你是否已经有了这项更新呢？
+In this case, it would store its decisions, and then update the array of nodes after its last decision.
+在这种情况下，它将存储它的判定，然后在最后一个判定做出后更新数组的节点。
+We use the update site in this example.
+在本例中，我们将使用更新站点。]]></example>
+    <score>3</score>
+    <create_time>2013-09-08 17:50:53</create_time>
+    <access_time>2013-09-08 18:41:18</access_time>
+  </item>
+  <item>
+    <name>master</name>
+    <phonetic><![CDATA[['mɑːstə]['mæstɚ]]]></phonetic>
+    <meaning><![CDATA[vt. 控制；精通；征服
+n. 硕士；主人；大师；教师
+adj. 主人的；主要的；熟练的]]></meaning>
+    <example><![CDATA[The puppy was fawning on its master.
+小狗向它的主人摇尾乞怜。
+If only I could be master of this subject.
+我多么希望能精通这门学科。
+The dog has transferred its affection to its new master.
+那狗已把它的感情转移到新主人身上。]]></example>
+    <score>4</score>
+    <create_time>2013-09-08 17:50:29</create_time>
+    <access_time>2013-09-08 18:41:22</access_time>
   </item>
 </wordbook>

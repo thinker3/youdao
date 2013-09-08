@@ -16,35 +16,78 @@ class Recite(object):
         self.window.title('Reciting')
         self.frame = Frame(self.window)
         self.init_UI()
+        self.words = self.master.words
+        self.run()
         self.window.protocol("WM_DELETE_WINDOW", self.close_handler)
+
     def close_handler(self):
         self.window.destroy()
         self.master.btn_recite.config(state=NORMAL)
 
     def init_UI(self):
-        self.label_name = Label(self.frame, text='')
-        self.label_name.grid(row=0)
+        self.name_string = StringVar()
+        self.entry_name = Entry(self.frame, textvariable=self.name_string)
+        self.entry_name.grid(row=0)
+        self.entry_name.bind('<Return>', self.enter_handler)
 
         self.label_phonetic = Label(self.frame, text='')
         self.label_phonetic.grid(row=1)
+
+        self.btn_show_phonetic = Button(self.frame, text="Show phonetic", command=self.show_phonetic)
+        self.btn_show_phonetic.grid(row=1, column=1)
 
         self.area_meaning =Text(self.frame,height=3,width=50,wrap=WORD)
         self.area_meaning.grid(row=2)
         scroll_meaning=Scrollbar(self.frame)
         scroll_meaning.grid(row=2, column=1, sticky=N+S)
         scroll_meaning.config(command=self.area_meaning.yview)
-        self.area_meaning.tag_config('color', background='red', foreground='white') # , wrap='word'
         self.area_meaning.configure(yscrollcommand=scroll_meaning.set)
 
-        self.area_example =Text(self.frame,height=7,width=50,background='white',wrap=WORD)
-        self.area_example.grid(row=3)
-        scroll_example=Scrollbar(self.frame)
-        scroll_example.grid(row=3, column=1, sticky=N+S)
-        scroll_example.config(command=self.area_example.yview)
-        self.area_example.tag_config(SEL, foreground='red')
-        self.area_example.configure(yscrollcommand=scroll_example.set)
-
         self.frame.pack(padx=5, pady=5)
+
+    def enter_handler(self, event):
+        name = self.name_string.get().strip()
+        if name:
+            self.item.update_access_time()
+        if name == self.item.name:
+            self.item.score += 1
+            self.rearrange(1)
+        else:
+            self.item.score -= 1
+            self.rearrange(0)
+        self.run()
+
+    def show_phonetic(self):
+        self.label_phonetic.__setitem__('text', self.item.phonetic)
+        self.btn_show_phonetic.config(state=DISABLED)
+
+    def run(self):
+        item = self.words[0]
+        self.name_string.set('')
+        self.btn_show_phonetic.config(state=NORMAL)
+        self.area_meaning.delete('1.0', END)
+        self.area_meaning.insert(INSERT, item.meaning)
+        self.item = item
+
+    def rearrange(self, right):
+        self.words.pop(0)
+        if len(self.words) < 7:
+            self.words.append(self.item)
+            return
+        if right:
+            index = None
+            for i, one in enumerate(self.words):
+                if one.score > self.item.score:
+                    index = i
+                    break
+            if not index:
+                self.words.append(self.item)
+            elif index < 6:
+                self.words.insert(4, self.item)
+            else:
+                self.words.insert(index, self.item)
+        else:
+            self.words.insert(4, self.item)
 
 
 class GUI(threading.Thread):
@@ -139,7 +182,10 @@ class GUI(threading.Thread):
 
     def add_to_xml(self):
         try:
-            self.words.insert(0, self.item.convert())
+            if self.words:
+                self.words.insert(1, self.item.convert())
+            else:
+                self.words.insert(0, self.item.convert())
         except:
             pass
         self.btn_add.config(state=DISABLED)

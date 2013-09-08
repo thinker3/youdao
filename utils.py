@@ -29,14 +29,11 @@ def init_list(filename='wordbook.myxml'):
         one = XmlItem(name, meaning, phonetic, example)
         create_time = item.select('./create_time/text()').extract()[0]
         create_time= datetime.strptime(create_time, '%Y-%m-%d %H:%M:%S')
-        modify_time = item.select('./modify_time/text()').extract()[0]
-        modify_time = datetime.strptime(modify_time, '%Y-%m-%d %H:%M:%S')
         access_time = item.select('./access_time/text()').extract()[0]
         access_time = datetime.strptime(access_time, '%Y-%m-%d %H:%M:%S')
         score = item.select('./score/text()').extract()[0]
         score = int(score)
         setattr(one, 'create_time', create_time)
-        setattr(one, 'modify_time', modify_time)
         setattr(one, 'access_time', access_time)
         setattr(one, 'score', score)
         temp.append(one)
@@ -59,8 +56,6 @@ def save_list(items, filename='wordbook.myxml'):
             score.text = str(one.score)
             create_time = etree.Element('create_time')
             create_time.text = one.create_time.strftime('%Y-%m-%d %H:%M:%S')
-            modify_time = etree.Element('modify_time')
-            modify_time.text = one.modify_time.strftime('%Y-%m-%d %H:%M:%S')
             access_time = etree.Element('access_time')
             access_time.text = one.access_time.strftime('%Y-%m-%d %H:%M:%S')
             if 1:
@@ -70,7 +65,6 @@ def save_list(items, filename='wordbook.myxml'):
                 item.append(example)
                 item.append(score)
                 item.append(create_time)
-                item.append(modify_time)
                 item.append(access_time)
         wordbook.append(item)
     s = etree.tostring(wordbook, pretty_print=True, encoding='utf8') # encoding is important
