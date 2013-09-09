@@ -32,6 +32,9 @@ class Recite(object):
         self.entry_name.grid(row=0)
         self.entry_name.bind('<Return>', self.enter_handler)
 
+        self.btn_del = Button(self.frame, text="Delete", command=self.delete)
+        self.btn_del.grid(row=0, column=1)
+
         self.label_phonetic = Label(self.frame, text='')
         self.label_phonetic.grid(row=1)
 
@@ -46,6 +49,10 @@ class Recite(object):
         self.area_meaning.configure(yscrollcommand=scroll_meaning.set)
 
         self.frame.pack(padx=5, pady=5)
+
+    def delete(self):
+        self.words.pop(0)
+        self.run()
 
     def enter_handler(self, event):
         name = self.name_string.get().strip()
