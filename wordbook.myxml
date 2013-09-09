@@ -1,62 +1,5 @@
 <wordbook>
   <item>
-    <name>module</name>
-    <phonetic><![CDATA[['mɒdjuːl]['mɑdʒul]]]></phonetic>
-    <meaning><![CDATA[n. [计] 模块；组件；模数]]></meaning>
-    <example><![CDATA[Switch from one module to another.
-从一个模块转换到另一个模块。
-In this step, you create a new module for the selector.
-在此步骤中，您将为选择器创建一个新的模块。
-You then iterate the modules that depended on you and remove this module from their lists.
-然后迭代具有依赖性的模块，并将这个模块从这些列表中删除。]]></example>
-    <score>4</score>
-    <create_time>2013-09-07 21:31:32</create_time>
-    <access_time>2013-09-08 19:58:59</access_time>
-  </item>
-  <item>
-    <name>thing</name>
-    <phonetic><![CDATA[[θɪŋ][θɪŋ]]]></phonetic>
-    <meaning><![CDATA[n. 事情；东西；事物；情况]]></meaning>
-    <example><![CDATA[How dared they do such a thing?
-他们怎么敢做出这样的事?
-I will do any thing to happify you.
-为了让你高兴我愿做任何事情。
-This wooden thing is for beating the eggs.
-这个木制的东西是用来打鸡蛋的。]]></example>
-    <score>4</score>
-    <create_time>2013-09-07 21:31:27</create_time>
-    <access_time>2013-09-08 19:59:03</access_time>
-  </item>
-  <item>
-    <name>directory</name>
-    <phonetic><![CDATA[[dɪ'rekt(ə)rɪ; daɪ-][daɪ'rɛktəri]]]></phonetic>
-    <meaning><![CDATA[n. [计] 目录；工商名录；姓名地址录
-adj. 指导的；咨询的]]></meaning>
-    <example><![CDATA[Think of it like a directory within a file system.
-可以将它想象为文件系统内的一个目录。
-Examine this directory to debug problems, or to see the status of activation.
-检查这个目录以调试相关的问题，或者查看激活的状态。
-However, as soon as you do that, the directory itself and all its subdirectories pop right back up again.
-但在您删除后，目录本身及其所有子目录又会立即出现在原来的位置。]]></example>
-    <score>0</score>
-    <create_time>2013-09-08 17:50:42</create_time>
-    <access_time>2013-09-08 19:59:09</access_time>
-  </item>
-  <item>
-    <name>you</name>
-    <phonetic><![CDATA[[juː][ju]]]></phonetic>
-    <meaning><![CDATA[pron. 你；你们]]></meaning>
-    <example><![CDATA[Are you against it or for it?
-你对此事是反对呢还是赞成?
-You have to consider what to do next.
-你必须考虑下一步该做什么。
-Do what I tell you.
-按照我告诉你的去做。]]></example>
-    <score>4</score>
-    <create_time>2013-09-07 21:30:01</create_time>
-    <access_time>2013-09-08 19:59:14</access_time>
-  </item>
-  <item>
     <name>commit</name>
     <phonetic><![CDATA[[kə'mɪt][kə'mɪt]]]></phonetic>
     <meaning><![CDATA[vt. 犯罪，做错事；把...交托给；指派…作战；使…承担义务]]></meaning>
@@ -69,6 +12,100 @@ So many children who commit violent crimes have themselves been brutalized by ye
     <score>4</score>
     <create_time>2013-09-07 20:31:37</create_time>
     <access_time>2013-09-08 19:59:17</access_time>
+  </item>
+  <item>
+    <name>method</name>
+    <phonetic><![CDATA[['meθəd]['mɛθəd]]]></phonetic>
+    <meaning><![CDATA[n. 方法；条理；类函数
+adj. 使用体验派表演方法的]]></meaning>
+    <example><![CDATA[Have you tried the new method?
+你试过那个新的方法了吗?
+They are using a new prospecting method to quest for oil.
+他们正在采用一种新的勘探方法寻找石油。
+They have been questing for a new method of language teaching for years.
+多年来他们一直在探索语言教学的一种新方法。]]></example>
+    <score>0</score>
+    <create_time>2013-09-09 21:56:31</create_time>
+    <access_time>2013-09-09 21:56:31</access_time>
+  </item>
+  <item>
+    <name>function</name>
+    <phonetic><![CDATA[['fʌŋ(k)ʃ(ə)n]['fʌŋkʃən]]]></phonetic>
+    <meaning><![CDATA[n. 功能；[数] 函数；职责；盛大的集会
+vi. 运行；活动；行使职责]]></meaning>
+    <example><![CDATA[The machine doesn't function.
+那机器不能运行了。
+Her post should be determined only by her function in the company.
+她的职位视其在公司的作用而定。
+The chairman strictly prelimited the scope of the committee's function.
+主席严格地限制了委员会的职能范围。]]></example>
+    <score>0</score>
+    <create_time>2013-09-09 21:55:48</create_time>
+    <access_time>2013-09-09 21:55:48</access_time>
+  </item>
+  <item>
+    <name>click</name>
+    <phonetic><![CDATA[[klɪk][klɪk]]]></phonetic>
+    <meaning><![CDATA[vt. 点击；使发咔哒声
+vi. 作咔哒声
+n. 单击；滴答声]]></meaning>
+    <example><![CDATA[Where do I click?
+我要在那里点击？
+On the right, click the title bar (but not the title itself) for the business space or the page.
+在右侧，单击业务空间或页面的标题栏（但不是标题本身）。
+You can click on that advice to navigate to it. 
+可以在通知上单击，以便直接导航到它。]]></example>
+    <score>0</score>
+    <create_time>2013-09-09 21:55:07</create_time>
+    <access_time>2013-09-09 21:55:07</access_time>
+  </item>
+  <item>
+    <name>will</name>
+    <phonetic><![CDATA[[wɪl][wɪl]]]></phonetic>
+    <meaning><![CDATA[n. 意志；决心；情感；遗嘱；意图；心愿
+vt. 决心要；遗赠；用意志力使
+vi. 愿意；下决心
+aux. 将；愿意；必须]]></meaning>
+    <example><![CDATA[He will speak to us next week.
+下星期他将给我们做讲演。
+His friends will testify for him.
+他的朋友们将为他作证。
+He will abide my coming.
+他将等候我的到来。]]></example>
+    <score>0</score>
+    <create_time>2013-09-09 21:54:17</create_time>
+    <access_time>2013-09-09 21:54:17</access_time>
+  </item>
+  <item>
+    <name>submit</name>
+    <phonetic><![CDATA[[səb'mɪt][səb'mɪt]]]></phonetic>
+    <meaning><![CDATA[vt. 使服从；主张；呈递
+vi. 提交；服从]]></meaning>
+    <example><![CDATA[You still need to submit the form, but to where?
+您仍需要提交表单，但是提交到何处？
+They submit only the data model or a portion thereof.
+它们只提交数据模型或者其中的一部分。
+In this example, the attacker needs to wait until the user clicks the submit button before he receives his data.
+在本例中，攻击者需要等待一段时间，直到用户单击提交按钮之后才能接收到他的数据。]]></example>
+    <score>0</score>
+    <create_time>2013-09-09 21:53:38</create_time>
+    <access_time>2013-09-09 21:53:38</access_time>
+  </item>
+  <item>
+    <name>discard</name>
+    <phonetic><![CDATA[[dɪ'skɑːd][dɪs'kɑrd]]]></phonetic>
+    <meaning><![CDATA[vt. 抛弃；放弃；丢弃
+vi. 放弃
+n. 抛弃；被丢弃的东西或人]]></meaning>
+    <example><![CDATA[You have to discard any thoughts of disbanding.
+你必须丢弃一切解散军队的念头。
+But, because of schedule pressure or because the results are encouraging, we do not discard that code.
+但是，由于时间的压力或者是结果的奖励，我们并没有抛弃这个代码。
+The number of e-mails you receive grows if you do not set the system to discard them or store them at specific times.
+如果不进行系统设置来丢弃邮件或在特定时间存储邮件，您收到的电子邮件数量将会不断增加。]]></example>
+    <score>0</score>
+    <create_time>2013-09-09 21:52:42</create_time>
+    <access_time>2013-09-09 21:52:42</access_time>
   </item>
   <item>
     <name>what</name>
@@ -177,5 +214,34 @@ Latvia, Lithuania and Estonia reached an agreement with NATO on the lease of fig
     <score>1</score>
     <create_time>2013-09-08 19:06:42</create_time>
     <access_time>2013-09-08 20:16:23</access_time>
+  </item>
+  <item>
+    <name>module</name>
+    <phonetic><![CDATA[['mɒdjuːl]['mɑdʒul]]]></phonetic>
+    <meaning><![CDATA[n. [计] 模块；组件；模数]]></meaning>
+    <example><![CDATA[Switch from one module to another.
+从一个模块转换到另一个模块。
+In this step, you create a new module for the selector.
+在此步骤中，您将为选择器创建一个新的模块。
+You then iterate the modules that depended on you and remove this module from their lists.
+然后迭代具有依赖性的模块，并将这个模块从这些列表中删除。]]></example>
+    <score>5</score>
+    <create_time>2013-09-07 21:31:32</create_time>
+    <access_time>2013-09-09 21:30:07</access_time>
+  </item>
+  <item>
+    <name>directory</name>
+    <phonetic><![CDATA[[dɪ'rekt(ə)rɪ; daɪ-][daɪ'rɛktəri]]]></phonetic>
+    <meaning><![CDATA[n. [计] 目录；工商名录；姓名地址录
+adj. 指导的；咨询的]]></meaning>
+    <example><![CDATA[Think of it like a directory within a file system.
+可以将它想象为文件系统内的一个目录。
+Examine this directory to debug problems, or to see the status of activation.
+检查这个目录以调试相关的问题，或者查看激活的状态。
+However, as soon as you do that, the directory itself and all its subdirectories pop right back up again.
+但在您删除后，目录本身及其所有子目录又会立即出现在原来的位置。]]></example>
+    <score>1</score>
+    <create_time>2013-09-08 17:50:42</create_time>
+    <access_time>2013-09-09 21:30:23</access_time>
   </item>
 </wordbook>

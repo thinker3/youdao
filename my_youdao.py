@@ -190,7 +190,11 @@ class GUI(threading.Thread):
         self.root.focus_force()
 
     def in_xml(self):
-        return self.item.name in [one.name for one in self.words]
+        #return self.item.name in [one.name for one in self.words]
+        for one in self.words:
+            if self.item.name == one.name:
+                return True
+        return False
 
     def add_to_xml(self):
         try:
