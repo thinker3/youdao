@@ -65,7 +65,7 @@ class Recite(object):
         else:
             self.item.score -= 1
             self.rearrange(0)
-            showinfo('Result', "Sorry, wrong!", parent=self.frame)
+            showinfo('Result', "Sorry, wrong!\nThe answer is ( %s )!" % self.item.name, parent=self.frame)
         self.run()
 
     def show_phonetic(self):
