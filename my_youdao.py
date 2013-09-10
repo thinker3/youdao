@@ -130,8 +130,10 @@ class GUI(threading.Thread):
 
     def init_UI(self):
         self.root.iconify()
-        self.label_name = Label(self.frame, text='')
-        self.label_name.grid(row=0)
+        self.name_string = StringVar()
+        self.entry_name = Entry(self.frame, textvariable=self.name_string)
+        self.entry_name.grid(row=0)
+        self.entry_name.bind('<Return>', self.enter_handler)
 
         self.btn_add = Button(self.frame, text="Add", command=self.add_to_xml, state=DISABLED)
         self.btn_add.grid(row=0, column=1)
@@ -165,13 +167,16 @@ class GUI(threading.Thread):
     def create_recite_window(self):
         self.app = Recite(self)
         self.btn_recite.config(state=DISABLED)
-
+    
+    def enter_handler(self, event):
+        word = self.name_string.get().strip()
+        self.search(word)
 
     def show_in_gui(self):
         self.center()
         if not self.in_xml():
             self.btn_add.config(state=NORMAL)
-        self.label_name.__setitem__('text', self.item.name)
+        self.name_string.set(self.item.name)
         self.label_phonetic.__setitem__('text', self.item.phonetic)
 
         self.area_meaning.config(state=NORMAL)
