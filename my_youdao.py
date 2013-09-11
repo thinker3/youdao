@@ -24,7 +24,7 @@ class Recite(object):
 
     def close_handler(self):
         self.window.destroy()
-        self.master.btn_recite.config(state=NORMAL)
+        self.master.btn_recite_handler()
 
     def init_UI(self):
         self.name_string = StringVar()
@@ -69,16 +69,20 @@ class Recite(object):
         self.run()
 
     def show_phonetic(self):
-        self.label_phonetic.__setitem__('text', self.item.phonetic)
+        self.label_phonetic.__setitem__('text', self.item.convert().phonetic)
         self.btn_show_phonetic.config(state=DISABLED)
 
     def run(self):
+        if len(self.words) == 0:
+            self.close_handler()
+            return
         item = self.words[0]
         self.name_string.set('')
         self.entry_name.focus()
+        self.label_phonetic.config(text='')
         self.btn_show_phonetic.config(state=NORMAL)
         self.area_meaning.delete('1.0', END)
-        self.area_meaning.insert(INSERT, item.meaning)
+        self.area_meaning.insert(INSERT, item.convert().meaning)
         self.item = item
 
     def rearrange(self, right):
@@ -172,6 +176,12 @@ class GUI(threading.Thread):
         word = self.name_string.get().strip()
         self.search(word)
 
+    def btn_recite_handler(self):
+        if self.words:
+            self.btn_recite.config(state=NORMAL)
+        else:
+            self.btn_recite.config(state=DISABLED)
+
     def show_in_gui(self):
         self.center()
         if not self.in_xml():
@@ -210,6 +220,7 @@ class GUI(threading.Thread):
         except:
             pass
         self.btn_add.config(state=DISABLED)
+        self.btn_recite.config(state=NORMAL)
 
     def run(self):
         while self.running:

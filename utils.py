@@ -23,10 +23,7 @@ def init_list(filename='wordbook.myxml'):
     items = xxs.select('//wordbook/item')
     for item in items:
         name = item.select('./name/text()').extract()[0]
-        phonetic = item.select('./phonetic/text()').extract()[0]
-        meaning = item.select('./meaning/text()').extract()[0]
-        example = item.select('./example/text()').extract()[0]
-        one = XmlItem(name, meaning, phonetic, example)
+        one = XmlItem(name)
         create_time = item.select('./create_time/text()').extract()[0]
         create_time= datetime.strptime(create_time, '%Y-%m-%d %H:%M:%S')
         access_time = item.select('./access_time/text()').extract()[0]
@@ -46,12 +43,6 @@ def save_list(items, filename='wordbook.myxml'):
         if 1:
             name = etree.Element('name')
             name.text = one.name
-            phonetic = etree.Element('phonetic')
-            phonetic.text = etree.CDATA(one.phonetic)
-            meaning = etree.Element('meaning')
-            meaning.text = etree.CDATA(one.meaning)
-            example = etree.Element('example')
-            example.text = etree.CDATA(one.example)
             score = etree.Element('score')
             score.text = str(one.score)
             create_time = etree.Element('create_time')
@@ -60,9 +51,6 @@ def save_list(items, filename='wordbook.myxml'):
             access_time.text = one.access_time.strftime('%Y-%m-%d %H:%M:%S')
             if 1:
                 item.append(name)
-                item.append(phonetic)
-                item.append(meaning)
-                item.append(example)
                 item.append(score)
                 item.append(create_time)
                 item.append(access_time)
