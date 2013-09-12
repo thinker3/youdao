@@ -2,6 +2,7 @@
 *~
 *swp
 *.db
+*.myxml
 
 # C extensions
 *.so
