@@ -19,6 +19,8 @@ class Item(peewee.Model):
     def convert(self):
         return XmlItem(self.name)
 
+Item.create_table(True)
+
 class XmlItem(object):
     def __init__(self, name):
         self.name = name.strip()
