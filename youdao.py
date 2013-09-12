@@ -1,11 +1,18 @@
 #coding=utf8
 
 import re, urllib2
+from datetime import datetime
 from scrapy.selector import HtmlXPathSelector
 def query_web(word):
     url = "http://dict.youdao.com/search?tab=chn&keyfrom=dict.top&q=" + word
+    before_fetching = datetime.now()
     html = urllib2.urlopen(url).read()
-    hxs = HtmlXPathSelector(text = html)
+    after_fetching = datetime.now()
+    time_fetching = after_fetching - before_fetching
+    print 'time_fetching %f' % time_fetching.total_seconds()
+    hxs = HtmlXPathSelector(text=html)
+    time_parsing = datetime.now() - after_fetching
+    print 'time_parsing %f' % time_parsing.total_seconds()
 
     phonetics = hxs.select('//div[@id="phrsListTab"]/h2[1]/div[1]/span')
     phonetic = ''
@@ -17,7 +24,10 @@ def query_web(word):
     lis = hxs.select('//div[@id="phrsListTab"]/div[@class="trans-container"]/ul/li')
     meaning = ''
     for li in lis:
-        meaning += li.select('./text()').extract()[0] + '\n'
+        try:
+            meaning += li.select('./text()').extract()[0] + '\n'
+        except:
+            pass
 
     examples = hxs.select('//div[@id="bilingual"]/ul/li')
     example = ''
