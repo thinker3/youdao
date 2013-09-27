@@ -23,6 +23,7 @@ class Recite(object):
         self.window.protocol("WM_DELETE_WINDOW", self.close_handler)
 
     def close_handler(self):
+        save_list(self.words)
         self.window.destroy()
         self.master.btn_recite_handler()
 
@@ -217,6 +218,7 @@ class GUI(threading.Thread):
                 self.words.insert(1, self.item.convert())
             else:
                 self.words.insert(0, self.item.convert())
+            save_list(self.words)
         except:
             pass
         self.btn_add.config(state=DISABLED)
