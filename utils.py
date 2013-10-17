@@ -1,11 +1,17 @@
 #coding=utf8
 
+import os
 from datetime import datetime
 from models import XmlItem
 from lxml import etree
 from scrapy.selector import XmlXPathSelector
 
+def abspath(filename):
+    dirname = os.path.dirname(os.path.abspath(__file__))
+    return os.path.join(dirname, filename)
+
 def init_list(filename='wordbook.myxml'):
+    filename = abspath(filename)
     temp = []
     try:
         f = open(filename, 'r')
@@ -37,6 +43,7 @@ def init_list(filename='wordbook.myxml'):
     return temp
 
 def save_list(items, filename='wordbook.myxml'):
+    filename = abspath(filename)
     wordbook = etree.Element('wordbook')
     for one in items:
         item = etree.Element('item')

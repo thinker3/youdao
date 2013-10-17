@@ -30,19 +30,19 @@ class Recite(object):
     def init_UI(self):
         self.name_string = StringVar()
         self.entry_name = Entry(self.frame, textvariable=self.name_string)
-        self.entry_name.grid(row=0)
+        self.entry_name.grid(row=0, sticky=W)
         self.entry_name.bind('<Return>', self.enter_handler)
 
         self.btn_del = Button(self.frame, text="Delete", command=self.delete)
         self.btn_del.grid(row=0, column=1)
 
         self.label_phonetic = Label(self.frame, text='')
-        self.label_phonetic.grid(row=1)
+        self.label_phonetic.grid(row=1, sticky=W)
 
         self.btn_show_phonetic = Button(self.frame, text="Show phonetic", command=self.show_phonetic)
         self.btn_show_phonetic.grid(row=1, column=1)
 
-        self.area_meaning =Text(self.frame,height=3,width=50,wrap=WORD)
+        self.area_meaning =Text(self.frame,height=5,width=90,wrap=WORD)
         self.area_meaning.grid(row=2)
         scroll_meaning=Scrollbar(self.frame)
         scroll_meaning.grid(row=2, column=1, sticky=N+S)
@@ -56,9 +56,9 @@ class Recite(object):
         self.run()
 
     def enter_handler(self, event):
+        self.show_phonetic()
+        self.item.update_access_time()
         name = self.name_string.get().strip()
-        if name:
-            self.item.update_access_time()
         if name == self.item.name:
             self.item.score += 1
             self.rearrange(1)
@@ -151,15 +151,16 @@ class GUI(threading.Thread):
         self.label_phonetic = Label(self.frame, text='')
         self.label_phonetic.grid(row=1)
 
-        self.area_meaning =Text(self.frame,height=3,width=50,wrap=WORD)
+        self.area_meaning =Text(self.frame,height=5,width=90,wrap=WORD)
         self.area_meaning.grid(row=2)
         scroll_meaning=Scrollbar(self.frame)
         scroll_meaning.grid(row=2, column=1, sticky=N+S)
         scroll_meaning.config(command=self.area_meaning.yview)
-        self.area_meaning.tag_config('color', background='red', foreground='white') # , wrap='word'
+        self.area_meaning.tag_config(SEL, background='red')
+        #self.area_meaning.tag_config('color', background='white', foreground='red') # , wrap='word'
         self.area_meaning.configure(yscrollcommand=scroll_meaning.set)
 
-        self.area_example =Text(self.frame,height=7,width=50,background='white',wrap=WORD)
+        self.area_example =Text(self.frame,height=9,width=90,background='white',wrap=WORD)
         self.area_example.grid(row=3)
         scroll_example=Scrollbar(self.frame)
         scroll_example.grid(row=3, column=1, sticky=N+S)
@@ -167,7 +168,16 @@ class GUI(threading.Thread):
         self.area_example.tag_config(SEL, foreground='red')
         self.area_example.configure(yscrollcommand=scroll_example.set)
 
+        self.btn_save = Button(self.frame, text="Save", command=self.save_after_edit)
+        self.btn_save.grid(row=4)
+
         self.frame.pack(padx=5, pady=5)
+
+    def save_after_edit(self):
+        if self.item:
+            self.item.meaning = self.area_meaning.get('1.0', END)
+            self.item.example = self.area_example.get('1.0', END)
+            self.item.save()
 
     def create_recite_window(self):
         self.app = Recite(self)
@@ -185,6 +195,7 @@ class GUI(threading.Thread):
 
     def show_in_gui(self):
         self.center()
+        self.btn_save.config(state=NORMAL)
         if not self.in_xml():
             self.btn_add.config(state=NORMAL)
         self.name_string.set(self.item.name)
@@ -192,15 +203,27 @@ class GUI(threading.Thread):
 
         self.area_meaning.config(state=NORMAL)
         self.area_meaning.delete('1.0', END)
-        self.area_meaning.insert(INSERT, self.item.meaning, 'color')
-        self.area_meaning.config(state=DISABLED)
+        self.area_meaning.insert(INSERT, self.item.meaning)
+        #self.area_meaning.insert(INSERT, self.item.meaning, 'color')
 
-        self.area_example.config(state=NORMAL)
         self.area_example.delete('1.0', END)
         self.area_example.insert(INSERT, self.item.example)
-        self.area_example.config(state=DISABLED)
 
         self.root.deiconify()
+        self.root.attributes('-topmost', 1)
+        self.root.attributes('-topmost', 0)
+        self.root.focus_force()
+
+    def clear(self, word=''):
+        self.center()
+        self.name_string.set(word)
+        self.label_phonetic.__setitem__('text', 'No such word or web failure.')
+        self.area_meaning.delete('1.0', END)
+        self.area_example.delete('1.0', END)
+
+        self.btn_add.config(state=DISABLED)
+        self.btn_save.config(state=DISABLED)
+
         self.root.attributes('-topmost', 1)
         self.root.attributes('-topmost', 0)
         self.root.focus_force()
@@ -213,16 +236,23 @@ class GUI(threading.Thread):
         return False
 
     def add_to_xml(self):
+        # if add a word that is not in db now to xml, save it to db.
+        try:
+            item = Item.get(name=self.item.name)
+        except:
+            item = None
+        if not item:
+            self.item.save(force_insert=True) # only save() not save to db
+
         try:
             if self.words:
                 self.words.insert(1, self.item.convert())
             else:
                 self.words.insert(0, self.item.convert())
             save_list(self.words)
-        except:
-            pass
+        except Exception as e:
+            print e
         self.btn_add.config(state=DISABLED)
-        self.btn_recite.config(state=NORMAL)
 
     def run(self):
         while self.running:
@@ -239,7 +269,7 @@ class GUI(threading.Thread):
         self.item = item
 
     def save(self, item_dict):
-        if item_dict['example']:
+        if item_dict['example']: # if no example, do not save to db, but if added to xml, save it to db.
             self.item = Item.create(**item_dict)
         else:
             self.item = Item(**item_dict)
@@ -257,6 +287,8 @@ class GUI(threading.Thread):
                 self.save(item_dict)
         if self.item:
             self.show_in_gui()
+        else:
+            self.clear(word)
 
     def respond(self, modifiers):
         if modifiers['left ctrl'] or modifiers['right ctrl']:
