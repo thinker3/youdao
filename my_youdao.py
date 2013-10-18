@@ -77,14 +77,17 @@ class Recite(object):
         if len(self.words) == 0:
             self.close_handler()
             return
-        item = self.words[0]
+        self.item = self.words[0]
         self.name_string.set('')
         self.entry_name.focus()
         self.label_phonetic.config(text='')
         self.btn_show_phonetic.config(state=NORMAL)
         self.area_meaning.delete('1.0', END)
-        self.area_meaning.insert(INSERT, item.convert().meaning)
-        self.item = item
+        try:
+            self.area_meaning.insert(INSERT, self.item.convert().meaning)
+        except:
+            self.words.pop(0)
+            self.run()
 
     def rearrange(self, right):
         self.words.pop(0)
