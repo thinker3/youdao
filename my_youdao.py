@@ -120,7 +120,7 @@ class GUI(threading.Thread):
     def __init__(self):
         threading.Thread.__init__(self)
         self.root = Tk()
-        self.root.title("Press ctrl to search seleted word")
+        self.root.title("Press ctrl to search selected word")
         self.root.protocol("WM_DELETE_WINDOW", self.close_handler)
         self.frame=Frame(self.root)
         self.words = init_list()
@@ -160,7 +160,6 @@ class GUI(threading.Thread):
         scroll_meaning.grid(row=2, column=1, sticky=N+S)
         scroll_meaning.config(command=self.area_meaning.yview)
         self.area_meaning.tag_config(SEL, background='red')
-        #self.area_meaning.tag_config('color', background='white', foreground='red') # , wrap='word'
         self.area_meaning.configure(yscrollcommand=scroll_meaning.set)
 
         self.area_example =Text(self.frame,height=9,width=90,background='white',wrap=WORD)
@@ -196,6 +195,20 @@ class GUI(threading.Thread):
         else:
             self.btn_recite.config(state=DISABLED)
 
+    def highlight(self):
+        start = 1.0
+        pos = self.area_example.search(self.item.name, start, stopindex=END)
+        while pos:
+            length = len(self.item.name)
+            #row, col = pos.split('.')
+            #end = int(col) + length
+            #end = row + '.' + str(end)
+            end = '%s + %dc' % (pos, length)
+            self.area_example.tag_add('highlight', pos, end)
+            start = end
+            pos = self.area_example.search(self.item.name, start, stopindex=END)
+        self.area_example.tag_config('highlight', background='white', foreground='red')
+
     def show_in_gui(self):
         self.center()
         self.btn_save.config(state=NORMAL)
@@ -207,10 +220,10 @@ class GUI(threading.Thread):
         self.area_meaning.config(state=NORMAL)
         self.area_meaning.delete('1.0', END)
         self.area_meaning.insert(INSERT, self.item.meaning)
-        #self.area_meaning.insert(INSERT, self.item.meaning, 'color')
 
         self.area_example.delete('1.0', END)
         self.area_example.insert(INSERT, self.item.example)
+        self.highlight()
 
         self.root.deiconify()
         self.root.attributes('-topmost', 1)
