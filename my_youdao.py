@@ -8,7 +8,6 @@ from models import Item
 from utils import init_list, save_list
 from Tkinter import Tk, Label, Toplevel, Frame
 from Tkinter import *
-import tkMessageBox
 from tkMessageBox import *
 
 class Recite(object):
@@ -100,7 +99,8 @@ class Recite(object):
                 if one.score > self.item.score:
                     index = i
                     break
-            if not index:
+            # if not index: # when i==0, it may be not right
+            if index is None:
                 self.words.append(self.item)
             elif index < 6:
                 self.words.insert(4, self.item)
