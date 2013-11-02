@@ -319,6 +319,7 @@ class GUI(threading.Thread):
                             self.search(var)
                         else:
                             print 'same word ?'
+                            self.search(var)
 
     def close_handler(self):
         self.root.iconify()
