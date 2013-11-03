@@ -13,4 +13,4 @@ python tkinter_version.py &
 or
 python my_youdao.py & # best until now
 
-gui pops up when ctrl pressed if not minimized.
+gui pops up when left ctrl pressed if not minimized.

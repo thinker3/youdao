@@ -307,7 +307,7 @@ class GUI(threading.Thread):
             self.clear(word)
 
     def respond(self, modifiers):
-        if modifiers['left ctrl'] or modifiers['right ctrl']:
+        if modifiers['left ctrl']:
             var = os.popen('xsel').read().strip()
             if var:
                 var = self.p.split(var)
