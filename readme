@@ -1,16 +1,14 @@
 youdao_like
 ======
 
+installation:
 sudo apt-get install python-dev xsel python-tk
-sudo pip install -i http://pypi.douban.com/simple/ peewee Scrapy
-python word_selected.py
-or
-python gui.py &
-or
-python class_based.py &
-or
-python tkinter_version.py &
-or
-python my_youdao.py & # best until now
+sudo pip install -i http://pypi.douban.com/simple/ peewee Scrapy urlgrabber requests
 
-gui pops up when left ctrl pressed if not minimized.
+run:
+python my_youdao.py &
+
+notes:
+GUI pops up when left ctrl and left shift both pressed if not minimized.
+I recommend you to use dropbox to synchronize db and xml files.
+

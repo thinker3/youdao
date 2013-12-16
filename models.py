@@ -15,7 +15,7 @@ class XmlItem(object):
     def convert(self):
         return Item.get(name=self.name)
 
-from utils import abspath
+from utils import dbpath
 class Item(peewee.Model):
     name = peewee.CharField(primary_key=True)
     phonetic = peewee.CharField()
@@ -23,7 +23,7 @@ class Item(peewee.Model):
     example = peewee.TextField()
 
     class Meta:
-        database = peewee.SqliteDatabase(abspath('webyoudao.db'), check_same_thread=False)
+        database = peewee.SqliteDatabase(dbpath, check_same_thread=False)
 
     def getattr(self, attr):
         return object.__getattribute__(self, attr)
