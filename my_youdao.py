@@ -170,6 +170,9 @@ class GUI(threading.Thread):
         return False
 
     def add_to_xml(self):
+        self.btn_add.config(state=DISABLED)
+        if self.in_xml(): # strange duplicate items
+            return
         # if add a word that is not in db now to xml, save it to db.
         try:
             item = Item.get(name=self.item.name)
@@ -186,7 +189,6 @@ class GUI(threading.Thread):
             save_list(self.words)
         except Exception as e:
             print e
-        self.btn_add.config(state=DISABLED)
 
     def run(self):
         while self.running:
