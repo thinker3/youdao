@@ -12,6 +12,8 @@
 *.egg-info
 dist
 build
+local
+include
 eggs
 parts
 bin
