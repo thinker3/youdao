@@ -2,8 +2,8 @@ youdao_like
 ======
 
 installation:
-sudo apt-get install python-dev xsel python-tk
-sudo pip install -i http://pypi.douban.com/simple/ peewee Scrapy urlgrabber requests
+sudo apt-get install python-dev xsel python-tk libxml2-dev libxslt1-dev
+sudo pip install -i http://pypi.douban.com/simple/ peewee Scrapy urlgrabber requests splinter
 
 run:
 python my_youdao.py &
