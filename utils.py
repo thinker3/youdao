@@ -10,6 +10,7 @@ from scrapy.selector import Selector
 DB_FILE_NAME = 'webyoudao.db'
 XML_FILE_NAME = 'wordbook.myxml'
 DROPBOX_YOUDAO_PATH = '~/Dropbox/youdao_db_xml/'  # endswith '/'
+#DROPBOX_YOUDAO_PATH = ''
 
 
 def abspath():
@@ -23,9 +24,8 @@ def get_xml_db_path():
         xml_in_dropbox = os.path.expanduser(
             DROPBOX_YOUDAO_PATH) + XML_FILE_NAME
         db_in_dropbox = os.path.expanduser(DROPBOX_YOUDAO_PATH) + DB_FILE_NAME
-        db_in_dropbox = os.path.expanduser(DROPBOX_YOUDAO_PATH) + DB_FILE_NAME
-    if os.path.exists(xml_in_dropbox) and os.path.exists(db_in_dropbox):
-        return xml_in_dropbox, db_in_dropbox
+        if os.path.exists(xml_in_dropbox) and os.path.exists(db_in_dropbox):
+            return xml_in_dropbox, db_in_dropbox
     else:
         return abspath()
 
@@ -88,3 +88,24 @@ def save_list(items):
     f = open(xmlpath, 'w')
     f.write(s)
     f.close()
+
+
+def write_word(word):
+    pass
+
+
+def read_word():
+    filename = 'word.txt'
+    dirname = os.path.dirname(os.path.abspath(__file__))
+    abspath = os.path.join(dirname, filename)
+    f = open(abspath, 'r')
+    word = f.readline()
+    f.close()
+    f = open(abspath, 'w')
+    f.write("")
+    f.close()
+    return word and word.split()[0]
+
+
+if __name__ == '__main__':
+    print read_word()

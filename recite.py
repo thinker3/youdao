@@ -1,20 +1,17 @@
 #coding=utf8
 import random
+import Tkinter as tk
+import tkMessageBox as mb
 from utils import save_list
-from Tkinter import N, S, W
-from Tkinter import Toplevel, Frame, Entry, StringVar, Button, Label
-from Tkinter import Text, Scrollbar, WORD
-from Tkinter import DISABLED, NORMAL, END, INSERT
-from tkMessageBox import showinfo
 
 
 class Recite(object):
 
     def __init__(self, master):
         self.master = master
-        self.window = Toplevel(self.master.root)
+        self.window = tk.Toplevel(self.master.root)
         self.window.title('Reciting')
-        self.frame = Frame(self.window)
+        self.frame = tk.Frame(self.window)
         self.init_UI()
         self.words = self.master.words
         self.run()
@@ -26,28 +23,28 @@ class Recite(object):
         self.master.btn_recite_handler()
 
     def init_UI(self):
-        self.name_string = StringVar()
-        self.entry_name = Entry(self.frame, textvariable=self.name_string)
-        self.entry_name.grid(row=0, sticky=W)
+        self.name_string = tk.StringVar()
+        self.entry_name = tk.Entry(self.frame, textvariable=self.name_string)
+        self.entry_name.grid(row=0, sticky=tk.W)
         self.entry_name.bind('<Return>', self.enter_handler)
         # for the numeric pad enter key, no effects on message box
         self.entry_name.bind('<KP_Enter>', self.enter_handler)
 
-        self.btn_del = Button(self.frame, text="Delete", command=self.delete)
+        self.btn_del = tk.Button(self.frame, text="Delete", command=self.delete)
         self.btn_del.grid(row=0, column=1)
 
-        self.label_phonetic = Label(self.frame, text='')
-        self.label_phonetic.grid(row=1, sticky=W)
+        self.label_phonetic = tk.Label(self.frame, text='')
+        self.label_phonetic.grid(row=1, sticky=tk.W)
 
-        self.btn_show_phonetic = Button(self.frame,
+        self.btn_show_phonetic = tk.Button(self.frame,
                                         text="Show phonetic",
                                         command=self.show_phonetic)
         self.btn_show_phonetic.grid(row=1, column=1)
 
-        self.area_meaning = Text(self.frame, height=5, width=80, wrap=WORD)
+        self.area_meaning = tk.Text(self.frame, height=5, width=80, wrap=tk.WORD)
         self.area_meaning.grid(row=2)
-        scroll_meaning = Scrollbar(self.frame)
-        scroll_meaning.grid(row=2, column=1, sticky=N + S)
+        scroll_meaning = tk.Scrollbar(self.frame)
+        scroll_meaning.grid(row=2, column=1, sticky=tk.N + tk.S)
         scroll_meaning.config(command=self.area_meaning.yview)
         self.area_meaning.configure(yscrollcommand=scroll_meaning.set)
 
@@ -61,23 +58,24 @@ class Recite(object):
         self.show_phonetic()
         self.item.update_access_time()
         name = self.name_string.get().strip()
+        self.frame.update()
         if name == self.item.name:
             self.item.score += 1
             self.rearrange(1)
-            showinfo('Result', "Right, good!", parent=self.frame)
+            mb.showinfo('Result', "Right, good!", parent=None)
         else:
             self.item.score -= 2
             self.rearrange(0)
-            showinfo(
+            mb.showinfo(
                 'Result',
                 "Sorry, wrong!\nThe answer is ( %s )!" % self.item.name,
-                parent=self.frame,
+                parent=None,
             )
         self.run()
 
     def show_phonetic(self):
         self.label_phonetic.__setitem__('text', self.item.convert().phonetic)
-        self.btn_show_phonetic.config(state=DISABLED)
+        self.btn_show_phonetic.config(state=tk.DISABLED)
 
     def run(self):
         if len(self.words) == 0:
@@ -87,10 +85,10 @@ class Recite(object):
         self.name_string.set('')
         self.entry_name.focus()
         self.label_phonetic.config(text='')
-        self.btn_show_phonetic.config(state=NORMAL)
-        self.area_meaning.delete('1.0', END)
+        self.btn_show_phonetic.config(state=tk.NORMAL)
+        self.area_meaning.delete('1.0', tk.END)
         try:
-            self.area_meaning.insert(INSERT, self.item.convert().meaning)
+            self.area_meaning.insert(tk.INSERT, self.item.convert().meaning)
         except:
             self.words.pop(0)
             self.run()
@@ -139,22 +137,22 @@ class Flash(Recite):
         self.window.title('Flashing')
 
     def init_UI(self):
-        self.label_name = Label(self.frame, text='')
-        self.label_phonetic = Label(self.frame, text='')
-        self.btn_show_phonetic = Button(
+        self.label_name = tk.Label(self.frame, text='')
+        self.label_phonetic = tk.Label(self.frame, text='')
+        self.btn_show_phonetic = tk.Button(
             self.frame,
             text="Show phonetic",
             command=self.show_phonetic)
 
-        self.btn_yes = Button(self.frame, text="Yes", command=self.yes)
-        self.btn_no = Button(self.frame, text="No", command=self.no)
-        self.btn_del = Button(self.frame, text="Delete", command=self.delete)
+        self.btn_yes = tk.Button(self.frame, text="Yes", command=self.yes)
+        self.btn_no = tk.Button(self.frame, text="No", command=self.no)
+        self.btn_del = tk.Button(self.frame, text="Delete", command=self.delete)
 
-        self.area_meaning = Text(self.frame, height=10, width=80, wrap=WORD)
-        self.scroll_meaning = Scrollbar(self.frame)
+        self.area_meaning = tk.Text(self.frame, height=10, width=80, wrap=tk.WORD)
+        self.scroll_meaning = tk.Scrollbar(self.frame)
         self.scroll_meaning.config(command=self.area_meaning.yview)
         self.area_meaning.configure(yscrollcommand=self.scroll_meaning.set)
-        self.btn_show_meaning = Button(
+        self.btn_show_meaning = tk.Button(
             self.frame,
             text="Show meaning",
             command=self.show_meaning)
@@ -163,7 +161,7 @@ class Flash(Recite):
     def lay_out(self):
         row = 0
         column = 0
-        self.label_name.grid(row=row, sticky=W)
+        self.label_name.grid(row=row, sticky=tk.W)
         column += 1
         self.btn_yes.grid(row=row, column=column)
         column += 1
@@ -171,16 +169,16 @@ class Flash(Recite):
 
         row += 1
         column = 0
-        self.label_phonetic.grid(row=row, column=column, sticky=W)
+        self.label_phonetic.grid(row=row, column=column, sticky=tk.W)
         column += 1
         self.btn_no.grid(row=row, column=column)
         column += 1
         self.btn_show_phonetic.grid(row=row, column=column)
 
         row += 1
-        self.area_meaning.grid(row=row, sticky=W)
+        self.area_meaning.grid(row=row, sticky=tk.W)
         column = 1
-        self.scroll_meaning.grid(row=row, column=column, sticky=N + S)
+        self.scroll_meaning.grid(row=row, column=column, sticky=tk.N + tk.S)
         column += 1
         self.btn_show_meaning.grid(row=row, column=column)
         self.frame.pack(padx=5, pady=5)
@@ -192,14 +190,15 @@ class Flash(Recite):
         self.item = self.words[0]
         self.label_name.config(text=self.item.name)
         self.label_phonetic.config(text='')
-        self.btn_show_phonetic.config(state=NORMAL)
-        self.area_meaning.delete('1.0', END)
+        self.btn_show_phonetic.config(state=tk.NORMAL)
+        self.area_meaning.delete('1.0', tk.END)
 
     def yes(self, right=True):
         self.show_phonetic()
         self.show_meaning()
         self.item.update_access_time()
-        showinfo('Result', str(right), parent=self.frame)
+        self.frame.update()
+        mb.showinfo('Result', str(right), parent=None)
         if right:
             self.item.score += 1
             self.rearrange(1)
@@ -212,9 +211,9 @@ class Flash(Recite):
         self.yes(right=False)
 
     def show_meaning(self):
-        self.area_meaning.delete('1.0', END)
+        self.area_meaning.delete('1.0', tk.END)
         try:
-            self.area_meaning.insert(INSERT, self.item.convert().meaning)
+            self.area_meaning.insert(tk.INSERT, self.item.convert().meaning)
         except:
             self.words.pop(0)
             self.run()

@@ -1,47 +1,14 @@
 #coding=utf8
 
-import os
 from datetime import datetime
-#from scrapy.selector import HtmlXPathSelector
 from scrapy.selector import Selector
-from splinter import Browser
 
 
 class Fetcher(object):
-    def __init__(self):
-        self.browser = None
-
-    def quit(self):
-        if self.browser:
-            self.browser.quit()
-
-    def get_html_by_phantomjs(self, url):
-        self.browser.visit(url)
-        html = self.browser.html  # <type 'unicode'>
-        html = html.encode('utf-8')
-        return html
 
     def get_html_by_urllib2(self, url):
         import urllib2
         html = urllib2.urlopen(url).read()
-        return html
-
-    def get_html_by_urlgrabber(self, url):
-        import urlgrabber
-        html = urlgrabber.urlopen(url).read()
-        return html
-
-    def get_html_by_wget(self, url):
-        #import subprocess
-        #subprocess.call(["wget", "-r", "-np", "-A", "files", url])
-        # q, quiet; big O, output-document
-        cmd = 'wget -q -O tempword.html %s' % url
-        cmd = cmd.replace('&', '\&')
-        os.system(cmd)
-        f = open('tempword.html', 'r')
-        html = f.read()
-        f.close()
-        os.remove('tempword.html')
         return html
 
     def get_html_by_requests(self, url):
@@ -51,16 +18,7 @@ class Fetcher(object):
 
     def get_html(self, url):
         return self.get_html_by_requests(url)  # 1
-        #return self.get_html_by_urlgrabber(url)  # 2
-        #return self.get_html_by_wget(url)  # 2
-        if self.which_getter == 'phantomjs':
-            try:
-                self.browser = Browser('phantomjs')  # 3
-                return self.get_html_by_phantomjs(url)
-            except:
-                return self.get_html_by_urllib2(url)  # 2
-        else:
-            return self.get_html_by_urllib2(url)
+        return self.get_html_by_urllib2(url)  # 2
 
     def query(self, word):
         url = "http://dict.youdao.com/search?tab=chn&keyfrom=dict.top&q="
@@ -115,9 +73,19 @@ class Fetcher(object):
             return possible, False
         item_dict = {}
         item_dict['name'] = word
-        item_dict['phonetic'] = phonetic
-        item_dict['meaning'] = meaning
-        item_dict['example'] = example
+        item_dict['phonetic'] = phonetic.encode('utf8')
+        item_dict['meaning'] = meaning.encode('utf8')
+        item_dict['example'] = example.encode('utf8')
         return item_dict, True
 
-query_web = Fetcher()
+fetcher = Fetcher()
+
+
+if __name__ == '__main__':
+    while True:
+        query = raw_input('q to quit, input the word: ')
+        if query.lower() == 'q': break
+        item_dict, true = fetcher.query(query)
+        if true:
+            for k, v in item_dict.items():
+                print v
