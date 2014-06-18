@@ -17,7 +17,7 @@ elif sys.platform == 'linux':
     from keylogger import fetch_keys
     title = 'Press left ctrl and left shift to search selected word'
 else:
-    title = 'Not available'
+    title = 'Shortcut not available'
 
 
 class GUI(threading.Thread):
@@ -50,6 +50,8 @@ class GUI(threading.Thread):
     def init_UI(self):
         if sys.platform == 'linux':
             self.root.iconify()  # don't do it on darwin
+        elif sys.platform == 'win32':
+            self.root.iconify()
         self.name_string = tk.StringVar()
         self.entry_name = tk.Entry(self.frame, textvariable=self.name_string)
         self.entry_name.focus()
@@ -252,6 +254,7 @@ class GUI(threading.Thread):
     def run(self):
         while self.running:
             sleep(self.sleep_interval)
+            #print self.running
             if sys.platform == 'linux':
                 changed, modifiers, keys = fetch_keys()
                 if changed:
@@ -265,6 +268,8 @@ class GUI(threading.Thread):
                     else:
                         print 'same word ?'
                         self.search(var)
+            else:
+                self.running = False
 
     def query_db(self, word):
         try:
@@ -288,8 +293,8 @@ class GUI(threading.Thread):
             success = False
             try:
                 item_dict_or_str, success = fetcher.query(word)
-            except:
-                print 'web failure'
+            except Exception as e:
+                print e
             if item_dict_or_str and success:
                 self.save(item_dict_or_str)  # save and set self.item
         if self.item:
