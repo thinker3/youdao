@@ -13,7 +13,7 @@ from utils import init_list, save_list, read_word
 
 if sys.platform == 'darwin':
     title = 'Press ctrl+cmd+z to search selected word'
-elif sys.platform == 'linux':
+elif sys.platform == 'linux2':
     from keylogger import fetch_keys
     title = 'Press left ctrl and left shift to search selected word'
 else:
@@ -48,7 +48,7 @@ class GUI(threading.Thread):
         self.root.geometry("%dx%d+%d+%d" % (self.rootsize + (x, y)))
 
     def init_UI(self):
-        if sys.platform == 'linux':
+        if sys.platform == 'linux2':
             self.root.iconify()  # don't do it on darwin
         elif sys.platform == 'win32':
             self.root.iconify()
@@ -255,7 +255,7 @@ class GUI(threading.Thread):
         while self.running:
             sleep(self.sleep_interval)
             #print self.running
-            if sys.platform == 'linux':
+            if sys.platform == 'linux2':
                 changed, modifiers, keys = fetch_keys()
                 if changed:
                     self.respond(modifiers)
