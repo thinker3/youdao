@@ -17,14 +17,14 @@ elif sys.platform == 'linux2':
     from keylogger import fetch_keys
     title = 'Press left ctrl and left shift to search selected word'
 else:
-    title = 'Shortcut not available'
+    title = 'Press win+z to search selected word'
 
 
 class GUI(threading.Thread):
     item = None
     previous = ''
     running = True
-    sleep_interval = 0.05
+    sleep_interval = 0.5
     p = re.compile(r'[^a-zA-Z]')
 
     def __init__(self):
@@ -191,7 +191,8 @@ class GUI(threading.Thread):
         self.area_example.insert(tk.INSERT, self.item.example)
         self.highlight()
 
-        self.root.deiconify()
+        if sys.platform != 'win32':
+            self.root.deiconify()
         if sys.platform == 'darwin':
             # how to write long string
             long_cmd = (
@@ -199,7 +200,7 @@ class GUI(threading.Thread):
                 """to set frontmost of process "Python" to true'"""
             )
             os.system(long_cmd)
-        else:
+        elif sys.platform == 'linux2':
             self.root.attributes('-topmost', 1)
             self.root.attributes('-topmost', 0)
         self.root.focus_force()
@@ -218,9 +219,10 @@ class GUI(threading.Thread):
         self.btn_add.config(state=tk.DISABLED)
         self.btn_save.config(state=tk.DISABLED)
 
-        self.root.deiconify()
-        self.root.attributes('-topmost', 1)
-        self.root.attributes('-topmost', 0)
+        if sys.platform != 'win32':
+            self.root.deiconify()
+            self.root.attributes('-topmost', 1)
+            self.root.attributes('-topmost', 0)
         self.root.focus_force()
 
     def in_xml(self):
@@ -254,22 +256,25 @@ class GUI(threading.Thread):
     def run(self):
         while self.running:
             sleep(self.sleep_interval)
-            #print self.running
             if sys.platform == 'linux2':
                 changed, modifiers, keys = fetch_keys()
                 if changed:
                     self.respond(modifiers)
             elif sys.platform == 'darwin':
-                var = read_word()
-                if len(var) >= 3:
-                    if self.previous != var:
-                        self.previous = var
-                        self.search(var)
-                    else:
-                        print 'same word ?'
-                        self.search(var)
+                self.respond_to_file()
             else:
-                self.running = False
+                self.respond_to_file()
+
+    def respond_to_file(self):
+        var = read_word()
+        var = self.p.split(var)[0]
+        if len(var) >= 3:
+            if self.previous != var:
+                self.previous = var
+                self.search(var)
+            else:
+                print 'same word ?'
+                self.search(var)
 
     def query_db(self, word):
         try:
