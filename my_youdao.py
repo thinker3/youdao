@@ -24,7 +24,7 @@ class GUI(threading.Thread):
     item = None
     previous = ''
     running = True
-    sleep_interval = 0.5
+    sleep_interval = 0.05  # 0.5 is not responsive on linux2
     p = re.compile(r'[^a-zA-Z]')
 
     def __init__(self):
