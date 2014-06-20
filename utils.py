@@ -90,22 +90,5 @@ def save_list(items):
     f.write(s)
     f.close()
 
-
-def read_word():
-    dirname = os.path.dirname(os.path.abspath(__file__))
-    word_path = os.path.join(dirname, 'word.txt')
-    if os.path.exists(word_path):
-        f = open(word_path, 'r')
-        word = f.readline()
-        f.close()
-    else:
-        return ''
-    if sys.platform == 'win32':
-        os.popen('del %s' % word_path)
-    else:
-        os.popen('rm %s' % word_path)
-    return word and word.split()[0]
-
-
 if __name__ == '__main__':
-    print read_word()
+    pass

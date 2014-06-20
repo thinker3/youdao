@@ -2,14 +2,15 @@
 import os
 import re
 import sys
+import Queue
 import threading
-from time import sleep
+import time
 import Tkinter as tk
 
 from youdao import fetcher
 from models import Item
 from recite import Recite, Flash
-from utils import init_list, save_list, read_word
+from utils import init_list, save_list
 
 if sys.platform == 'darwin':
     title = 'Press ctrl+cmd+z to search selected word'
@@ -19,24 +20,79 @@ elif sys.platform == 'linux2':
 else:
     title = 'Press win+z to search selected word'
 
+dirname = os.path.dirname(os.path.abspath(__file__))
+word_path = os.path.join(dirname, 'word.txt')
+sleep_interval = 0.05  # 0.5 is not responsive on linux2
 
-class GUI(threading.Thread):
-    item = None
-    previous = ''
-    running = True
-    sleep_interval = 0.05  # 0.5 is not responsive on linux2
+
+class GetWord(threading.Thread):
     p = re.compile(r'[^a-zA-Z]')
+    previous = ''
 
-    def __init__(self):
+    def __init__(self, queue):
         threading.Thread.__init__(self)
+        self.queue = queue
+        self.daemon = True  # needed
+
+    def run(self):
+        while 1:
+            time.sleep(sleep_interval)
+            if sys.platform == 'linux2':
+                self.get_word()
+            else:
+                self.read_word()
+
+    def get_word(self):
+        changed, modifiers, keys = fetch_keys()
+        if changed:
+            if modifiers['left ctrl'] and modifiers['left shift']:
+                word = os.popen('xsel').read().strip()
+                if word:
+                    self.check_put_word(word)
+
+    def read_word(self):
+        if os.path.exists(word_path):
+            f = open(word_path, 'r')
+            word = f.readline()
+            f.close()
+            if sys.platform == 'win32':
+                os.popen('del %s' % word_path)
+            else:
+                os.popen('rm %s' % word_path)
+            if word:
+                self.check_put_word(word)
+
+    def check_put_word(self, word):
+        word = self.p.split(word)
+        if len(word) >= 1:
+            word = word[0]
+            if len(word) >= 3:
+                if self.previous != word:
+                    self.previous = word
+                    self.queue.put(word)
+                else:
+                    print 'same word ?'
+                    self.queue.put(word)
+
+
+class GUI(object):
+    item = None
+
+    def __init__(self, queue):
+        self.queue = queue
         self.root = tk.Tk()
         self.root.title(title)
         self.root.protocol("WM_DELETE_WINDOW", self.close_handler)
         self.frame = tk.Frame(self.root)
         self.words = init_list()
-        self.start()
         self.init_UI()
-        self.root.mainloop()
+        self.frame.after(100, self.respond)
+
+    def respond(self):
+        if not self.queue.empty():
+            word = self.queue.get()
+            self.search_word(word)
+        self.frame.after(100, self.respond)
 
     def center(self):
         w = self.root.winfo_screenwidth()
@@ -129,7 +185,7 @@ class GUI(threading.Thread):
         self.btn_sort.config(state=tk.DISABLED)
         self.words.sort(key=lambda x: x.score)
         save_list(self.words)
-        sleep(1)
+        time.sleep(1)
         self.btn_sort.config(state=tk.NORMAL)
 
     def save_after_edit(self):
@@ -150,7 +206,7 @@ class GUI(threading.Thread):
 
     def enter_handler(self, event):
         word = self.name_string.get().strip()
-        self.search(word)
+        self.search_word(word)
 
     def btn_recite_handler(self):
         if self.words:
@@ -172,9 +228,15 @@ class GUI(threading.Thread):
             self.area_example.tag_add('highlight', pos, end)
             start = end
             pos = self.area_example.search(
-                self.item.name, start, stopindex=tk.END)
-        self.area_example.tag_config('highlight', background='white',
-                                     foreground='red')
+                self.item.name,
+                start,
+                stopindex=tk.END
+            )
+        self.area_example.tag_config(
+            'highlight',
+            foreground='red',
+            background='white',
+        )
 
     def show_in_gui(self):
         self.center()
@@ -191,8 +253,7 @@ class GUI(threading.Thread):
         self.area_example.insert(tk.INSERT, self.item.example)
         self.highlight()
 
-        if sys.platform != 'win32':
-            self.root.deiconify()
+        self.root.deiconify()
         if sys.platform == 'darwin':
             # how to write long string
             long_cmd = (
@@ -200,9 +261,8 @@ class GUI(threading.Thread):
                 """to set frontmost of process "Python" to true'"""
             )
             os.system(long_cmd)
-        elif sys.platform == 'linux2':
-            self.root.attributes('-topmost', 1)
-            self.root.attributes('-topmost', 0)
+        self.root.attributes('-topmost', 1)
+        self.root.attributes('-topmost', 0)
         self.root.focus_force()
         self.entry_name.focus()
         self.entry_name.select_range(0, tk.END)  # TclError: bad entry index "1.0"
@@ -219,10 +279,9 @@ class GUI(threading.Thread):
         self.btn_add.config(state=tk.DISABLED)
         self.btn_save.config(state=tk.DISABLED)
 
-        if sys.platform != 'win32':
-            self.root.deiconify()
-            self.root.attributes('-topmost', 1)
-            self.root.attributes('-topmost', 0)
+        self.root.deiconify()
+        self.root.attributes('-topmost', 1)
+        self.root.attributes('-topmost', 0)
         self.root.focus_force()
 
     def in_xml(self):
@@ -253,29 +312,6 @@ class GUI(threading.Thread):
         except Exception as e:
             print e
 
-    def run(self):
-        while self.running:
-            sleep(self.sleep_interval)
-            if sys.platform == 'linux2':
-                changed, modifiers, keys = fetch_keys()
-                if changed:
-                    self.respond(modifiers)
-            elif sys.platform == 'darwin':
-                self.respond_to_file()
-            else:
-                self.respond_to_file()
-
-    def respond_to_file(self):
-        var = read_word()
-        var = self.p.split(var)[0]
-        if len(var) >= 3:
-            if self.previous != var:
-                self.previous = var
-                self.search(var)
-            else:
-                print 'same word ?'
-                self.search(var)
-
     def query_db(self, word):
         try:
             item = Item.get(name=word)
@@ -290,7 +326,7 @@ class GUI(threading.Thread):
         else:
             self.item = Item(**item_dict)
 
-    def search(self, word):
+    def search_word(self, word):
         word = word.lower()
         self.query_db(word)  # if word not in db, set self.item = None
         if not self.item:
@@ -307,27 +343,13 @@ class GUI(threading.Thread):
         else:
             self.clear(word, item_dict_or_str)  # here it is a string
 
-    def respond(self, modifiers):
-        if modifiers['left ctrl'] and modifiers['left shift']:
-            var = os.popen('xsel').read().strip()
-            if var:
-                var = self.p.split(var)
-                if len(var) >= 1:
-                    var = var[0]
-                    if len(var) >= 3:
-                        if self.previous != var:
-                            self.previous = var
-                            self.search(var)
-                        else:
-                            print 'same word ?'
-                            self.search(var)
-
     def close_handler(self):
         self.root.iconify()
         save_list(self.words)
-        self.running = False
         self.root.quit()
 
 
 if __name__ == '__main__':
-    gui = GUI()
+    queue = Queue.Queue()
+    GetWord(queue).start()
+    GUI(queue).root.mainloop()
