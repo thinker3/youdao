@@ -10,8 +10,9 @@ from scrapy.selector import Selector
 
 DB_FILE_NAME = 'webyoudao.db'
 XML_FILE_NAME = 'wordbook.myxml'
-DROPBOX_YOUDAO_PATH = '~/Dropbox/youdao_db_xml/'  # endswith '/'
-#DROPBOX_YOUDAO_PATH = ''
+# Dropbox
+YOUDAO_SYNC_PATH = '~/nuts/youdao_db_xml/'  # endswith '/'
+#YOUDAO_SYNC_PATH = ''
 
 
 def abspath():
@@ -21,12 +22,12 @@ def abspath():
 
 
 def get_xml_db_path():
-    if DROPBOX_YOUDAO_PATH:
-        xml_in_dropbox = os.path.expanduser(
-            DROPBOX_YOUDAO_PATH) + XML_FILE_NAME
-        db_in_dropbox = os.path.expanduser(DROPBOX_YOUDAO_PATH) + DB_FILE_NAME
-        if os.path.exists(xml_in_dropbox) and os.path.exists(db_in_dropbox):
-            return xml_in_dropbox, db_in_dropbox
+    if YOUDAO_SYNC_PATH:
+        xml_in_sync = os.path.expanduser(
+            YOUDAO_SYNC_PATH) + XML_FILE_NAME
+        db_in_sync = os.path.expanduser(YOUDAO_SYNC_PATH) + DB_FILE_NAME
+        if os.path.exists(xml_in_sync) and os.path.exists(db_in_sync):
+            return xml_in_sync, db_in_sync
     else:
         return abspath()
 
