@@ -205,6 +205,7 @@ class GUI(object):
         time.sleep(1)
         self.btn_sort.config(state=tk.NORMAL)
 
+    @init_close
     def save_after_edit(self):
         if self.item:
             self.item.meaning = self.area_meaning.get('1.0', tk.END)
