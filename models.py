@@ -1,6 +1,10 @@
 #coding=utf8
-import peewee
+
 from datetime import datetime
+import peewee
+
+proxy_db = peewee.Proxy()
+
 
 class XmlItem(object):
     def __init__(self, name):
@@ -15,7 +19,7 @@ class XmlItem(object):
     def convert(self):
         return Item.get(name=self.name)
 
-from utils import dbpath
+
 class Item(peewee.Model):
     name = peewee.CharField(primary_key=True)
     phonetic = peewee.CharField()
@@ -23,7 +27,7 @@ class Item(peewee.Model):
     example = peewee.TextField()
 
     class Meta:
-        database = peewee.SqliteDatabase(dbpath, check_same_thread=False)
+        database = proxy_db
 
     def getattr(self, attr):
         return object.__getattribute__(self, attr)
@@ -34,12 +38,8 @@ class Item(peewee.Model):
     def convert(self):
         return XmlItem(self.name)
 
-Item.create_table(True)
 
-
-
-
-
-
-
-
+if __name__ == '__main__':
+    #Item.create_table()
+    # create_table(True), fail silently if the table already exists
+    Item.create_table(True)
