@@ -1,4 +1,7 @@
+; win: #, ctrl: ^, alt: !, shift: +
 #z::
+!z::
++z::
 temp_txt = %userprofile%\git\youdao\word.txt
 tempClipboard = %ClipboardAll%
 Clipboard =
