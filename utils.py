@@ -5,8 +5,8 @@ import sys
 from datetime import datetime
 from models import XmlItem
 from lxml import etree
-#from scrapy.selector import XmlXPathSelector
-from scrapy.selector import Selector
+#from scrapy.selector import Selector
+from lxml_selector import Selector
 
 DB_FILE_NAME = 'webyoudao.db'
 XML_FILE_NAME = 'wordbook.myxml'
