@@ -7,6 +7,8 @@ I use it on Ubuntu, Mac, Windows.
 
 Ugly and a little bit hard to make it work the first time.
 
+It crashes sometimes.
+
 Data synchronization
 -------
 
