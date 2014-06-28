@@ -1,7 +1,8 @@
 #coding=utf8
 
 from datetime import datetime
-from scrapy.selector import Selector
+#from scrapy.selector import Selector
+from lxml_selector import Selector
 
 
 class Fetcher(object):
