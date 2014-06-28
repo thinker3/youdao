@@ -234,9 +234,9 @@ class GUI(object):
             self.btn_recite.config(state=tk.DISABLED)
             self.btn_flash.config(state=tk.DISABLED)
 
-    def highlight(self):
+    def highlight(self, name):
         start = 1.0
-        pos = self.area_example.search(self.item.name, start, stopindex=tk.END)
+        pos = self.area_example.search(name, start, stopindex=tk.END)
         while pos:
             length = len(self.item.name)
             #row, col = pos.split('.')
@@ -246,7 +246,7 @@ class GUI(object):
             self.area_example.tag_add('highlight', pos, end)
             start = end
             pos = self.area_example.search(
-                self.item.name,
+                name,
                 start,
                 stopindex=tk.END
             )
@@ -269,7 +269,8 @@ class GUI(object):
 
         self.area_example.delete('1.0', tk.END)
         self.area_example.insert(tk.INSERT, self.item.example)
-        self.highlight()
+        self.highlight(self.item.name)
+        self.highlight(self.item.name.title())
 
         self.root.deiconify()
         if sys.platform == 'darwin':
