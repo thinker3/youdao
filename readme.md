@@ -60,5 +60,3 @@ run:
     python my_youdao.py
 
 shortcut: alt+z or win+z or shift+z, you can change it in selected.ahk 
-
-notes: GUI doesn't pop up if minimized.
