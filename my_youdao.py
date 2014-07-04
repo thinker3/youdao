@@ -55,7 +55,7 @@ class GetWord(threading.Thread):
     def read_word(self):
         if os.path.exists(word_path):
             f = open(word_path, 'r')
-            word = f.readline()
+            word = f.readline().strip()
             f.close()
             if sys.platform == 'win32':
                 os.popen('del %s' % word_path)
