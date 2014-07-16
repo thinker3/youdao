@@ -272,7 +272,9 @@ class GUI(object):
         self.highlight(self.item.name)
         self.highlight(self.item.name.title())
 
-        self.root.deiconify()
+        if self.root.state() == 'iconic':
+            # normal, iconic, withdrawn, icon, zoomed
+            self.root.deiconify()
         if sys.platform == 'darwin':
             # how to write long string
             long_cmd = (
@@ -286,6 +288,7 @@ class GUI(object):
         self.entry_name.focus()
         self.entry_name.select_range(0, tk.END)  # TclError: bad entry index "1.0"
         self.entry_name.icursor(tk.END)
+        self.root.update()
 
     def clear(self, word='', meaning=''):
         self.center()
