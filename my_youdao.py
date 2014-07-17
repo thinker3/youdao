@@ -282,13 +282,14 @@ class GUI(object):
                 """to set frontmost of process "Python" to true'"""
             )
             os.system(long_cmd)
-        self.root.attributes('-topmost', 1)
-        self.root.attributes('-topmost', 0)
-        self.root.focus_force()
+        if sys.platform == 'linux2':
+            self.root.attributes('-topmost', 1)
+            self.root.attributes('-topmost', 0)
+        # To force a widget to have the focus even if the application isn't currently active
+        self.root.focus_force()  # focus(), not works
         self.entry_name.focus()
         self.entry_name.select_range(0, tk.END)  # TclError: bad entry index "1.0"
         self.entry_name.icursor(tk.END)
-        self.root.update()
 
     def clear(self, word='', meaning=''):
         self.center()
