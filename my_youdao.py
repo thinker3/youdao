@@ -22,8 +22,7 @@ elif sys.platform == 'linux2':
 else:
     title = 'Press win+z to search selected word'
 
-dirname = os.path.dirname(os.path.abspath(__file__))
-word_path = os.path.join(dirname, 'word.txt')
+word_path = os.path.expanduser('~/selected_word.txt')
 sleep_interval = 0.05  # 0.5 is not responsive on linux2
 
 
@@ -57,10 +56,7 @@ class GetWord(threading.Thread):
             f = open(word_path, 'r')
             word = f.readline().strip()
             f.close()
-            if sys.platform == 'win32':
-                os.popen('del %s' % word_path)
-            else:
-                os.popen('rm %s' % word_path)
+            os.remove(word_path)
             if word:
                 self.check_put_word(word)
 
