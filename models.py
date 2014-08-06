@@ -2,8 +2,24 @@
 
 from datetime import datetime
 import peewee
+from utils import dbpath
 
 proxy_db = peewee.Proxy()
+
+
+def init_close_db(old_func):
+    def new_func(*args, **kwargs):
+        # the db file can't be accessed by others
+        #db = peewee.SqliteDatabase(dbpath, check_same_thread=True)
+        #db = peewee.SqliteDatabase(dbpath, check_same_thread=False)
+        #db = peewee.SqliteDatabase(dbpath, threadlocals=False)
+        # OK, together with this proxy
+        db = peewee.SqliteDatabase(dbpath, threadlocals=True)
+        proxy_db.initialize(db)
+        r = old_func(*args, **kwargs)
+        proxy_db.initialize(None)
+        return r
+    return new_func
 
 
 class XmlItem(object):
@@ -16,8 +32,12 @@ class XmlItem(object):
     def update_access_time(self):
         self.access_time = datetime.now()
 
+    @init_close_db
     def convert(self):
-        return Item.get(name=self.name)
+        try:
+            return Item.get(name=self.name)
+        except:
+            print "The word [%s] is in xml but not in db." % self.name
 
 
 class Item(peewee.Model):

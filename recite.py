@@ -9,13 +9,13 @@ class Recite(object):
 
     def __init__(self, master):
         self.master = master
+        self.words = self.master.words
         self.window = tk.Toplevel(self.master.root)
         self.window.title('Reciting')
+        self.window.protocol("WM_DELETE_WINDOW", self.close_handler)
         self.frame = tk.Frame(self.window)
         self.init_UI()
-        self.words = self.master.words
         self.run()
-        self.window.protocol("WM_DELETE_WINDOW", self.close_handler)
 
     def close_handler(self):
         save_list(self.words)
@@ -82,16 +82,15 @@ class Recite(object):
             self.close_handler()
             return
         self.item = self.words[0]
+        if self.item.convert() is None:
+            self.words.pop(0)
+            return self.run()
         self.name_string.set('')
         self.entry_name.focus()
         self.label_phonetic.config(text='')
         self.btn_show_phonetic.config(state=tk.NORMAL)
         self.area_meaning.delete('1.0', tk.END)
-        try:
-            self.area_meaning.insert(tk.INSERT, self.item.convert().meaning)
-        except:
-            self.words.pop(0)
-            self.run()
+        self.area_meaning.insert(tk.INSERT, self.item.convert().meaning)
 
     def rearrange(self, right):
         if self.item != self.words[0]:  # to avoid multiple enter events
@@ -188,6 +187,9 @@ class Flash(Recite):
             self.close_handler()
             return
         self.item = self.words[0]
+        if self.item.convert() is None:
+            self.words.pop(0)
+            return self.run()
         self.label_name.config(text=self.item.name)
         self.label_phonetic.config(text='')
         self.btn_show_phonetic.config(state=tk.NORMAL)
@@ -212,8 +214,4 @@ class Flash(Recite):
 
     def show_meaning(self):
         self.area_meaning.delete('1.0', tk.END)
-        try:
-            self.area_meaning.insert(tk.INSERT, self.item.convert().meaning)
-        except:
-            self.words.pop(0)
-            self.run()
+        self.area_meaning.insert(tk.INSERT, self.item.convert().meaning)

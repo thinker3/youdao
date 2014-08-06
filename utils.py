@@ -3,7 +3,6 @@
 import os
 import sys
 from datetime import datetime
-from models import XmlItem
 from lxml import etree
 #from scrapy.selector import Selector
 from lxml_selector import Selector
@@ -35,6 +34,7 @@ xmlpath, dbpath = get_xml_db_path()
 
 
 def init_list():
+    from models import XmlItem
     temp = []
     try:
         f = open(xmlpath, 'r')

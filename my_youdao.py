@@ -10,9 +10,9 @@ import peewee
 import Tkinter as tk
 
 from youdao import fetcher
-from models import Item, proxy_db
+from models import Item, init_close_db
 from recite import Recite, Flash
-from utils import init_list, save_list, dbpath
+from utils import init_list, save_list
 
 if sys.platform == 'darwin':
     title = 'Press ctrl+cmd+z to search selected word'
@@ -71,21 +71,6 @@ class GetWord(threading.Thread):
                 else:
                     print 'same word ?'
                     self.queue.put(word)
-
-
-def  init_close(old_func):
-    def new_func(*args, **kwargs):
-        # the db file can't be accessed by others
-        #db = peewee.SqliteDatabase(dbpath, check_same_thread=True)
-        #db = peewee.SqliteDatabase(dbpath, check_same_thread=False)
-        #db = peewee.SqliteDatabase(dbpath, threadlocals=False)
-        # OK, together with this proxy
-        db = peewee.SqliteDatabase(dbpath, threadlocals=True)
-        proxy_db.initialize(db)
-        r = old_func(*args, **kwargs)
-        proxy_db.initialize(None)
-        return r
-    return new_func
 
 
 class GUI(object):
@@ -201,7 +186,7 @@ class GUI(object):
         time.sleep(1)
         self.btn_sort.config(state=tk.NORMAL)
 
-    @init_close
+    @init_close_db
     def save_after_edit(self):
         if self.item:
             self.item.meaning = self.area_meaning.get('1.0', tk.END)
@@ -312,7 +297,7 @@ class GUI(object):
                 return True
         return False
 
-    @init_close
+    @init_close_db
     def add_to_xml(self):
         self.btn_add.config(state=tk.DISABLED)
         if self.in_xml():  # strange duplicate items
@@ -334,7 +319,7 @@ class GUI(object):
         except Exception as e:
             print e
 
-    @init_close
+    @init_close_db
     def query_db(self, word):
         try:
             item = Item.get(name=word)
@@ -342,7 +327,7 @@ class GUI(object):
             item = None
         self.item = item
 
-    @init_close
+    @init_close_db
     def save(self, item_dict):
         # if no example, do not save to db, but if added to xml, save it to db.
         if item_dict['example']:
