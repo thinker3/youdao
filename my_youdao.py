@@ -238,7 +238,6 @@ class GUI(object):
         )
 
     def show_in_gui(self):
-        self.center()
         self.btn_save.config(state=tk.NORMAL)
         if not self.in_xml():
             self.btn_add.config(state=tk.NORMAL)
@@ -275,7 +274,6 @@ class GUI(object):
         self.entry_name.icursor(tk.END)
 
     def clear(self, word='', meaning=''):
-        self.center()
         self.name_string.set(word)
         self.label_phonetic.__setitem__('text', 'No such word or web failure.')
         self.area_meaning.delete('1.0', tk.END)
