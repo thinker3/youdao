@@ -86,6 +86,7 @@ class Recite(object):
             self.words.pop(0)
             return self.run()
         self.name_string.set('')
+        self.window.focus_force()
         self.entry_name.focus()
         self.label_phonetic.config(text='')
         self.btn_show_phonetic.config(state=tk.NORMAL)
@@ -190,6 +191,7 @@ class Flash(Recite):
         if self.item.convert() is None:
             self.words.pop(0)
             return self.run()
+        self.window.focus_force()
         self.label_name.config(text=self.item.name)
         self.label_phonetic.config(text='')
         self.btn_show_phonetic.config(state=tk.NORMAL)
