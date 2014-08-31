@@ -22,7 +22,11 @@ elif sys.platform == 'linux2':
 else:
     title = 'Press win+z to search selected word'
 
-word_path = os.path.expanduser('~/selected_word.txt')
+home = os.path.expanduser('~')
+filename = 'selected_word.txt'
+# TypeError: cannot concatenate 'str' and 'list' objects
+#word_path = os.path.join([home, filename])
+word_path = os.path.join(home, filename)
 sleep_interval = 0.05  # 0.5 is not responsive on linux2
 
 
