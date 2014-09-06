@@ -60,9 +60,15 @@ class GetWord(threading.Thread):
             f = open(word_path, 'r')
             word = f.readline().strip()
             f.close()
-            os.remove(word_path)
-            if word:
-                self.check_put_word(word)
+            try:
+                os.remove(word_path)
+            except WindowsError as e:
+                print type(e), e
+                time.sleep(0.2)
+                self.read_word()
+            else:
+                if word:
+                    self.check_put_word(word)
 
     def check_put_word(self, word):
         word = self.p.split(word)
