@@ -3,9 +3,9 @@
 import os
 import re
 import sys
+import time
 import Queue
 import threading
-import time
 import peewee
 import Tkinter as tk
 
@@ -31,9 +31,6 @@ sleep_interval = 0.05  # 0.5 is not responsive on linux2
 
 
 class GetWord(threading.Thread):
-    p = re.compile(r'[^a-zA-Z]')
-    previous = ''
-
     def __init__(self, queue):
         threading.Thread.__init__(self)
         self.queue = queue
@@ -53,7 +50,7 @@ class GetWord(threading.Thread):
             if modifiers['left ctrl'] and modifiers['left shift']:
                 word = os.popen('xsel').read().strip()
                 if word:
-                    self.check_put_word(word)
+                    self.queue.put(word)
 
     def read_word(self):
         if os.path.exists(word_path):
@@ -68,22 +65,12 @@ class GetWord(threading.Thread):
                 self.read_word()
             else:
                 if word:
-                    self.check_put_word(word)
-
-    def check_put_word(self, word):
-        word = self.p.split(word)
-        if len(word) >= 1:
-            word = word[0]
-            if len(word) >= 3:
-                if self.previous != word:
-                    self.previous = word
-                    self.queue.put(word)
-                else:
-                    print 'same word ?'
                     self.queue.put(word)
 
 
 class GUI(object):
+    p = re.compile(r'[^a-zA-Z]')
+    previous = ''
     item = None
 
     def __init__(self, queue):
@@ -96,10 +83,24 @@ class GUI(object):
         self.init_UI()
         self.frame.after(100, self.respond)
 
+    def check_word(self, word):
+        word = self.p.split(word)
+        if len(word) >= 1:
+            word = word[0]
+            if len(word) >= 3:
+                if self.previous != word:
+                    self.previous = word
+                else:
+                    print 'same word ?'
+                self.wd = word
+                return True
+
     def respond(self):
         if not self.queue.empty():
-            word = self.queue.get()
-            self.search_word(word)
+            word = self.queue.get().lower()
+            if self.check_word(word):
+                # this method also runs in the main thread
+                self.frame.after(5, self.search_word)
         self.frame.after(100, self.respond)
 
     def center(self):
@@ -215,7 +216,8 @@ class GUI(object):
 
     def enter_handler(self, event):
         word = self.name_string.get().strip()
-        self.search_word(word)
+        if word:
+            self.queue.put(word)
 
     def btn_recite_handler(self):
         if self.words:
@@ -343,8 +345,8 @@ class GUI(object):
         else:
             self.item = Item(**item_dict)
 
-    def search_word(self, word):
-        word = word.lower()
+    def search_word(self):
+        word = self.wd
         self.query_db(word)  # if word not in db, set self.item = None
         if not self.item:
             item_dict_or_str = ''
