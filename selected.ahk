@@ -2,7 +2,7 @@
 #z::
 !z::
 +z::
-temp_txt = %userprofile%\selected_word.txt
+temp_txt = %home%\selected_word.txt
 tempClipboard = %ClipboardAll%
 Clipboard =
 Send, ^c
