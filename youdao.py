@@ -1,11 +1,30 @@
 #coding=utf8
 
+import time
+import Queue
+import threading
 from datetime import datetime
 #from scrapy.selector import Selector
 from lxml_selector import Selector
 
 
-class Fetcher(object):
+class Fetcher(threading.Thread):
+
+    def __init__(self, middle_queue, product_queue):
+        threading.Thread.__init__(self)
+        self.middle_queue = middle_queue
+        self.product_queue = product_queue
+        self.daemon = True
+        self.running = True
+        self.sleep_interval = 0.05
+
+    def run(self):
+        while self.running:
+            time.sleep(self.sleep_interval)
+            if not self.middle_queue.empty():
+                word = self.middle_queue.get()
+                dict_possible = self.query(word)
+                self.product_queue.put(dict_possible)
 
     def get_html_by_urllib2(self, url):
         import urllib2
@@ -25,6 +44,7 @@ class Fetcher(object):
         url = "http://dict.youdao.com/search?tab=chn&keyfrom=dict.top&q="
         url += word
         before_fetching = datetime.now()
+        print before_fetching
         html = self.get_html(url)
         after_fetching = datetime.now()
         time_fetching = after_fetching - before_fetching
@@ -71,22 +91,30 @@ class Fetcher(object):
                     '//div[@class="error-typo"]//a/text()').extract()[0]
             except:
                 possible = ''
-            return possible, False
+            return possible
         item_dict = {}
         item_dict['name'] = word
         item_dict['phonetic'] = phonetic.encode('utf8')
         item_dict['meaning'] = meaning.encode('utf8')
         item_dict['example'] = example.encode('utf8')
-        return item_dict, True
-
-fetcher = Fetcher()
+        return item_dict
 
 
 if __name__ == '__main__':
+    middle_queue = Queue.Queue()
+    product_queue = Queue.Queue()
+    Fetcher(middle_queue, product_queue).start()
     while True:
-        query = raw_input('q to quit, input the word: ')
-        if query.lower() == 'q': break
-        item_dict, true = fetcher.query(query)
-        if true:
-            for k, v in item_dict.items():
-                print v
+        word = raw_input('q to quit, input the word: ')
+        if word.lower() == 'q':
+            break
+        middle_queue.put(word)
+        while True:
+            if not product_queue.empty():
+                dict_possible = product_queue.get()
+                if isinstance(dict_possible, dict):
+                    for k, v in dict_possible.items():
+                        print v
+                else:
+                    print dict_possible
+                break

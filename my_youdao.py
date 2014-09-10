@@ -5,67 +5,21 @@ import re
 import sys
 import time
 import Queue
-import threading
 import peewee
 import Tkinter as tk
 
-from youdao import fetcher
+from youdao import Fetcher
 from models import Item, init_close_db
 from recite import Recite, Flash
 from utils import init_list, save_list
+from word_getter import WordGetter
 
 if sys.platform == 'darwin':
     title = 'Press ctrl+cmd+z to search selected word'
 elif sys.platform == 'linux2':
-    from keylogger import fetch_keys
     title = 'Press left ctrl and left shift to search selected word'
 else:
     title = 'Press win+z to search selected word'
-
-home = os.path.expanduser('~')
-filename = 'selected_word.txt'
-# TypeError: cannot concatenate 'str' and 'list' objects
-#word_path = os.path.join([home, filename])
-word_path = os.path.join(home, filename)
-sleep_interval = 0.05  # 0.5 is not responsive on linux2
-
-
-class GetWord(threading.Thread):
-    def __init__(self, queue):
-        threading.Thread.__init__(self)
-        self.queue = queue
-        self.daemon = True  # needed
-
-    def run(self):
-        while 1:
-            time.sleep(sleep_interval)
-            if sys.platform == 'linux2':
-                self.get_word()
-            else:
-                self.read_word()
-
-    def get_word(self):
-        changed, modifiers, keys = fetch_keys()
-        if changed:
-            if modifiers['left ctrl'] and modifiers['left shift']:
-                word = os.popen('xsel').read().strip()
-                if word:
-                    self.queue.put(word)
-
-    def read_word(self):
-        if os.path.exists(word_path):
-            f = open(word_path, 'r')
-            word = f.readline().strip()
-            f.close()
-            try:
-                os.remove(word_path)
-            except WindowsError as e:
-                print type(e), e
-                time.sleep(0.2)
-                self.read_word()
-            else:
-                if word:
-                    self.queue.put(word)
 
 
 class GUI(object):
@@ -73,8 +27,10 @@ class GUI(object):
     previous = ''
     item = None
 
-    def __init__(self, queue):
-        self.queue = queue
+    def __init__(self, material_queue, middle_queue, product_queue):
+        self.material_queue = material_queue
+        self.middle_queue = middle_queue
+        self.product_queue = product_queue
         self.root = tk.Tk()
         self.root.title(title)
         self.root.protocol("WM_DELETE_WINDOW", self.close_handler)
@@ -83,24 +39,30 @@ class GUI(object):
         self.init_UI()
         self.frame.after(100, self.respond)
 
-    def check_word(self, word):
+    def check_search_word(self, word):
         word = self.p.split(word)
         if len(word) >= 1:
-            word = word[0]
+            word = word[0].lower()
             if len(word) >= 3:
                 if self.previous != word:
                     self.previous = word
                 else:
                     print 'same word ?'
-                self.wd = word
-                return True
+                self.search_word(word)
 
     def respond(self):
-        if not self.queue.empty():
-            word = self.queue.get().lower()
-            if self.check_word(word):
-                # this method also runs in the main thread
-                self.frame.after(5, self.search_word)
+        if not self.material_queue.empty():
+            word = self.material_queue.get()
+            self.check_search_word(word)
+        if self.item:
+            self.show_in_gui()
+            self.item = None
+        if not self.product_queue.empty():
+            item_dict_or_str = self.product_queue.get()
+            if isinstance(item_dict_or_str, dict):
+                self.save_item(item_dict_or_str)  # save and set self.item
+            else:
+                self.clear(item_dict_or_str)
         self.frame.after(100, self.respond)
 
     def center(self):
@@ -217,7 +179,7 @@ class GUI(object):
     def enter_handler(self, event):
         word = self.name_string.get().strip()
         if word:
-            self.queue.put(word)
+            self.material_queue.put(word)
 
     def btn_recite_handler(self):
         if self.words:
@@ -253,6 +215,8 @@ class GUI(object):
         self.btn_save.config(state=tk.NORMAL)
         if not self.in_xml():
             self.btn_add.config(state=tk.NORMAL)
+        else:
+            self.btn_add.config(state=tk.DISABLED)
         self.name_string.set(self.item.name)
         self.label_phonetic.__setitem__('text', self.item.phonetic)
 
@@ -263,7 +227,9 @@ class GUI(object):
         self.area_example.insert(tk.INSERT, self.item.example)
         self.highlight(self.item.name)
         self.highlight(self.item.name.title())
+        self.popup_and_focus()
 
+    def popup_and_focus(self):
         if self.root.state() == 'iconic':
             # normal, iconic, withdrawn, icon, zoomed
             self.root.deiconify()
@@ -285,20 +251,14 @@ class GUI(object):
         self.entry_name.select_range(0, tk.END)  # TclError: bad entry index "1.0"
         self.entry_name.icursor(tk.END)
 
-    def clear(self, word='', meaning=''):
-        self.name_string.set(word)
+    def clear(self, meaning=''):
         self.label_phonetic.__setitem__('text', 'No such word or web failure.')
         self.area_meaning.delete('1.0', tk.END)
         self.area_meaning.insert(tk.INSERT, meaning)
         self.area_example.delete('1.0', tk.END)
-
         self.btn_add.config(state=tk.DISABLED)
         self.btn_save.config(state=tk.DISABLED)
-
-        self.root.deiconify()
-        self.root.attributes('-topmost', 1)
-        self.root.attributes('-topmost', 0)
-        self.root.focus_force()
+        self.popup_and_focus()
 
     def in_xml(self):
         # return self.item.name in [one.name for one in self.words]
@@ -332,35 +292,22 @@ class GUI(object):
     @init_close_db
     def query_db(self, word):
         try:
-            item = Item.get(name=word)
+            self.item = Item.get(name=word)
+            return True
         except:
-            item = None
-        self.item = item
+            return False
 
     @init_close_db
-    def save(self, item_dict):
+    def save_item(self, item_dict):
         # if no example, do not save to db, but if added to xml, save it to db.
         if item_dict['example']:
             self.item = Item.create(**item_dict)
         else:
             self.item = Item(**item_dict)
 
-    def search_word(self):
-        word = self.wd
-        self.query_db(word)  # if word not in db, set self.item = None
-        if not self.item:
-            item_dict_or_str = ''
-            success = False
-            try:
-                item_dict_or_str, success = fetcher.query(word)
-            except Exception as e:
-                print e
-            if item_dict_or_str and success:
-                self.save(item_dict_or_str)  # save and set self.item
-        if self.item:
-            self.show_in_gui()
-        else:
-            self.clear(word, item_dict_or_str)  # here it is a string
+    def search_word(self, word):
+        if not self.query_db(word):
+            self.middle_queue.put(word)
 
     def close_handler(self):
         self.root.iconify()
@@ -369,6 +316,9 @@ class GUI(object):
 
 
 if __name__ == '__main__':
-    queue = Queue.Queue()
-    GetWord(queue).start()
-    GUI(queue).root.mainloop()
+    material_queue = Queue.Queue()
+    middle_queue = Queue.Queue()
+    product_queue = Queue.Queue()
+    WordGetter(material_queue).start()
+    Fetcher(middle_queue, product_queue).start()
+    GUI(material_queue, middle_queue, product_queue).root.mainloop()
