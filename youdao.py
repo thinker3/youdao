@@ -2,10 +2,13 @@
 
 import time
 import Queue
+import urllib2
+import requests
 import threading
 from datetime import datetime
 #from scrapy.selector import Selector
 from lxml_selector import Selector
+from utils import Status
 
 
 class Fetcher(threading.Thread):
@@ -14,45 +17,39 @@ class Fetcher(threading.Thread):
         threading.Thread.__init__(self)
         self.middle_queue = middle_queue
         self.product_queue = product_queue
-        self.daemon = True
-        self.running = True
         self.sleep_interval = 0.05
 
     def run(self):
-        while self.running:
+        while Status.running:
             time.sleep(self.sleep_interval)
             if not self.middle_queue.empty():
                 word = self.middle_queue.get()
                 dict_possible = self.query(word)
                 self.product_queue.put(dict_possible)
 
-    def get_html_by_urllib2(self, url):
-        import urllib2
-        html = urllib2.urlopen(url).read()
-        return html
-
-    def get_html_by_requests(self, url):
-        import requests
-        html = requests.get(url).text
-        return html
-
     def get_html(self, url):
-        return self.get_html_by_requests(url)  # 1
-        return self.get_html_by_urllib2(url)  # 2
+        try:
+            return urllib2.urlopen(url).read()
+            return requests.get(url).text
+        except Exception as e:
+            print type(e), e
+            return ''
 
     def query(self, word):
         url = "http://dict.youdao.com/search?tab=chn&keyfrom=dict.top&q="
         url += word
         before_fetching = datetime.now()
-        print before_fetching
         html = self.get_html(url)
+        if not html:
+            return ''
         after_fetching = datetime.now()
         time_fetching = after_fetching - before_fetching
-        print 'time_fetching %f' % time_fetching.total_seconds()
-        hxs = Selector(text=html)
-        time_parsing = datetime.now() - after_fetching
-        print 'time_parsing %f' % time_parsing.total_seconds()
+        print
+        print word
+        print datetime.strftime( before_fetching, '%Y/%m/%d %H:%M:%S')
+        print 'time_fetching %.2f' % time_fetching.total_seconds()
 
+        hxs = Selector(text=html)
         phonetics = hxs.xpath('//div[@id="phrsListTab"]/h2[1]/div[1]/span')
         phonetic = ''
         for ph in phonetics:
@@ -105,16 +102,18 @@ if __name__ == '__main__':
     product_queue = Queue.Queue()
     Fetcher(middle_queue, product_queue).start()
     while True:
-        word = raw_input('q to quit, input the word: ')
+        word = raw_input('q to quit, input the word: ').strip()
         if word.lower() == 'q':
+            Status.running = False
             break
-        middle_queue.put(word)
-        while True:
-            if not product_queue.empty():
-                dict_possible = product_queue.get()
-                if isinstance(dict_possible, dict):
-                    for k, v in dict_possible.items():
-                        print v
-                else:
-                    print dict_possible
-                break
+        if word:
+            middle_queue.put(word)
+            while True:
+                if not product_queue.empty():
+                    dict_possible = product_queue.get()
+                    if isinstance(dict_possible, dict):
+                        for k, v in dict_possible.items():
+                            print v
+                    else:
+                        print dict_possible
+                    break

@@ -92,5 +92,9 @@ def save_list(items):
     f.close()
 
 
+class Status(object):
+    running = True
+
+
 if __name__ == '__main__':
     pass

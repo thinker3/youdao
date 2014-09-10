@@ -5,13 +5,12 @@ import re
 import sys
 import time
 import Queue
-import peewee
 import Tkinter as tk
 
 from youdao import Fetcher
 from models import Item, init_close_db
 from recite import Recite, Flash
-from utils import init_list, save_list
+from utils import init_list, save_list, Status
 from word_getter import WordGetter
 
 if sys.platform == 'darwin':
@@ -31,6 +30,7 @@ class GUI(object):
         self.material_queue = material_queue
         self.middle_queue = middle_queue
         self.product_queue = product_queue
+        self.item_queue = Queue.Queue()
         self.root = tk.Tk()
         self.root.title(title)
         self.root.protocol("WM_DELETE_WINDOW", self.close_handler)
@@ -54,13 +54,14 @@ class GUI(object):
         if not self.material_queue.empty():
             word = self.material_queue.get()
             self.check_search_word(word)
-        if self.item:
+        if not self.item_queue.empty():
+            self.item = self.item_queue.get()
             self.show_in_gui()
-            self.item = None
         if not self.product_queue.empty():
             item_dict_or_str = self.product_queue.get()
             if isinstance(item_dict_or_str, dict):
-                self.save_item(item_dict_or_str)  # save and set self.item
+                item = self.save_item(item_dict_or_str)
+                self.item_queue.put(item)
             else:
                 self.clear(item_dict_or_str)
         self.frame.after(100, self.respond)
@@ -292,24 +293,28 @@ class GUI(object):
     @init_close_db
     def query_db(self, word):
         try:
-            self.item = Item.get(name=word)
-            return True
+            return Item.get(name=word)
         except:
-            return False
+            return None
 
     @init_close_db
     def save_item(self, item_dict):
         # if no example, do not save to db, but if added to xml, save it to db.
         if item_dict['example']:
-            self.item = Item.create(**item_dict)
+            item = Item.create(**item_dict)
         else:
-            self.item = Item(**item_dict)
+            item = Item(**item_dict)
+        return item
 
     def search_word(self, word):
-        if not self.query_db(word):
+        item = self.query_db(word)
+        if item:
+            self.item_queue.put(item)
+        else:
             self.middle_queue.put(word)
 
     def close_handler(self):
+        Status.running = False
         self.root.iconify()
         save_list(self.words)
         self.root.quit()

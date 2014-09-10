@@ -9,6 +9,8 @@ import threading
 if sys.platform == 'linux2':
     from keylogger import fetch_keys
 
+from utils import Status
+
 home = os.path.expanduser('~')
 filename = 'selected_word.txt'
 # TypeError: cannot concatenate 'str' and 'list' objects
@@ -19,15 +21,13 @@ sleep_interval = 0.05  # 0.5 is not responsive on linux2
 
 class WordGetter(threading.Thread):
 
-    def __init__(self, queue=None, daemon=True, is_test=False):
+    def __init__(self, queue=None, is_test=False):
         threading.Thread.__init__(self)
         self.queue = queue
-        self.daemon = daemon
         self.is_test = is_test
-        self.running = True
 
     def run(self):
-        while self.running:
+        while Status.running:
             time.sleep(sleep_interval)
             if sys.platform == 'linux2':
                 self.fetch_word()
@@ -60,7 +60,7 @@ class WordGetter(threading.Thread):
     def put_or_print_or_quit(self, word):
         if word == 'q' and self.is_test:
             print 'quit'
-            self.running = False
+            Status.running = False
         elif self.queue:
             self.queue.put(word)
             if self.is_test:
@@ -71,7 +71,6 @@ class WordGetter(threading.Thread):
 
 if __name__ == '__main__':
     #getter = WordGetter(is_test=True)
-    #getter = WordGetter(daemon=False, is_test=True)
     queue = Queue.Queue()
-    getter = WordGetter(queue=queue, daemon=False, is_test=True)
+    getter = WordGetter(queue=queue, is_test=True)
     getter.start()
