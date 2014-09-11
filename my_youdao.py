@@ -76,6 +76,10 @@ class GUI(object):
         self.root.geometry("%dx%d+%d+%d" % (self.rootsize + (x, y)))
 
     def init_UI(self):
+        self.root.resizable(0, 0)
+        meaning_height = 8
+        example_height = 12
+        meaning_example_width = 90
         if sys.platform == 'linux2':
             self.root.iconify()  # don't do it on darwin
         elif sys.platform == 'win32':
@@ -103,14 +107,16 @@ class GUI(object):
 
         self.label_phonetic = tk.Label(self.frame, text='')
 
-        self.area_meaning = tk.Text(self.frame, height=5, width=90, wrap=tk.WORD)
+        self.area_meaning = tk.Text(self.frame, height=meaning_height,
+                width=meaning_example_width, wrap=tk.WORD)
         self.scroll_meaning = tk.Scrollbar(self.frame)
         self.scroll_meaning.config(command=self.area_meaning.yview)
         self.area_meaning.tag_config(tk.SEL, background='red')
         self.area_meaning.configure(yscrollcommand=self.scroll_meaning.set)
 
         self.area_example = tk.Text(
-            self.frame, height=9, width=90, background='white', wrap=tk.WORD)
+            self.frame, height=example_height, width=meaning_example_width,
+            background='white', wrap=tk.WORD)
         self.scroll_example = tk.Scrollbar(self.frame)
         self.scroll_example.config(command=self.area_example.yview)
         self.area_example.tag_config(tk.SEL, foreground='red')
