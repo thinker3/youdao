@@ -259,6 +259,7 @@ class GUI(object):
         self.entry_name.icursor(tk.END)
 
     def clear(self, meaning=''):
+        self.name_string.set(self.previous)
         self.label_phonetic.__setitem__('text', 'No such word or web failure.')
         self.area_meaning.delete('1.0', tk.END)
         self.area_meaning.insert(tk.INSERT, meaning)
