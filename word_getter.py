@@ -74,3 +74,13 @@ if __name__ == '__main__':
     queue = Queue.Queue()
     getter = WordGetter(queue=queue, is_test=True)
     getter.start()
+    import random
+    while Status.running:
+        try:
+            f = open(word_path, 'w')
+            r = random.randint(1, 100)
+            f.write('hello %s' % r)
+            f.close()
+            time.sleep(2)
+        except KeyboardInterrupt:
+            Status.running = False
