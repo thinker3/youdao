@@ -23,7 +23,7 @@ else:
 
 
 class GUI(object):
-    p = re.compile(r'[^a-zA-Z]')
+    p = re.compile(r'\w{2,}')
     previous = ''
     item = None
 
@@ -52,15 +52,14 @@ class GUI(object):
             os.system('xsel -c')  # clear
 
     def check_search_word(self, word):
-        word = self.p.split(word)
-        if len(word) >= 1:
-            word = word[0].lower()
-            if len(word) >= 3:
-                if self.previous != word:
-                    self.previous = word
-                else:
-                    print 'same word ?'
-                self.search_word(word)
+        word_list = self.p.findall(word)
+        if word_list:
+            word = word_list[0].lower()
+            if self.previous != word:
+                self.previous = word
+            else:
+                print 'same word ?'
+            self.search_word(word)
 
     def respond(self):
         if not self.material_queue.empty():
