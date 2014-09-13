@@ -3,7 +3,8 @@
 
 import os
 import sys
-import time 
+import time
+import random
 import Queue
 import threading
 if sys.platform == 'linux2':
@@ -71,10 +72,8 @@ class WordGetter(threading.Thread):
 
 if __name__ == '__main__':
     #getter = WordGetter(is_test=True)
-    queue = Queue.Queue()
-    getter = WordGetter(queue=queue, is_test=True)
+    getter = WordGetter(queue=Queue.Queue(), is_test=True)
     getter.start()
-    import random
     while Status.running:
         try:
             f = open(word_path, 'w')
