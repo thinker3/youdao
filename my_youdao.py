@@ -5,6 +5,7 @@ import re
 import sys
 import time
 import Queue
+import peewee
 import Tkinter as tk
 
 from youdao import Fetcher
@@ -308,7 +309,11 @@ class GUI(object):
     def save_item(self, item_dict):
         # if no example, do not save to db, but if added to xml, save it to db.
         if item_dict['example']:
-            item = Item.create(**item_dict)
+            try:
+                item = Item.create(**item_dict)
+            except peewee.IntegrityError as e:
+                print type(e), e
+                item = self.query_db(item_dict['name'])
         else:
             item = Item(**item_dict)
         return item
