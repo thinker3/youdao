@@ -36,9 +36,20 @@ class GUI(object):
         self.root.title(title)
         self.root.protocol("WM_DELETE_WINDOW", self.close_handler)
         self.frame = tk.Frame(self.root)
+        self.frame.bind("<FocusIn>", self.focus_in)
+        self.frame.bind("<FocusOut>", self.focus_out)
         self.words = init_list()
         self.init_UI()
         self.frame.after(100, self.respond)
+
+    def focus_in(self, e):
+        if sys.platform == 'linux2':
+            self.focus_in_entry()
+
+    def focus_out(self, e):
+        if sys.platform == 'linux2':
+            #os.popen('xsel -c')  # crashes
+            os.system('xsel -c')  # clear
 
     def check_search_word(self, word):
         word = self.p.split(word)
@@ -255,6 +266,9 @@ class GUI(object):
         if sys.platform != 'darwin':
             # To force a widget to have the focus even if the application isn't currently active
             self.root.focus_force()  # focus(), not works
+        self.focus_in_entry()
+
+    def focus_in_entry(self):
         self.entry_name.focus()
         self.entry_name.select_range(0, tk.END)  # TclError: bad entry index "1.0"
         self.entry_name.icursor(tk.END)
