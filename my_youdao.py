@@ -171,6 +171,7 @@ class GUI(object):
         self.frame.pack(padx=5, pady=5)
 
     def sort(self):
+        self.words = init_list()
         self.btn_sort.config(state=tk.DISABLED)
         self.words.sort(key=lambda x: x.score)
         save_list(self.words)
@@ -185,11 +186,13 @@ class GUI(object):
             self.item.save()
 
     def create_recite_window(self):
+        self.words = init_list()
         self.app = Recite(self)
         self.btn_recite.config(state=tk.DISABLED)
         self.btn_flash.config(state=tk.DISABLED)
 
     def create_flash_window(self):
+        self.words = init_list()
         self.app = Flash(self)
         self.btn_recite.config(state=tk.DISABLED)
         self.btn_flash.config(state=tk.DISABLED)
@@ -283,6 +286,7 @@ class GUI(object):
         self.popup_and_focus()
 
     def in_xml(self):
+        self.words = init_list()
         # return self.item.name in [one.name for one in self.words]
         for one in self.words:
             if self.item.name == one.name:
@@ -341,7 +345,6 @@ class GUI(object):
     def close_handler(self):
         Status.running = False
         self.root.iconify()
-        save_list(self.words)
         self.root.quit()
 
 
