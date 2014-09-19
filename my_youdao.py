@@ -286,7 +286,6 @@ class GUI(object):
         self.popup_and_focus()
 
     def in_xml(self):
-        self.words = init_list()
         # return self.item.name in [one.name for one in self.words]
         for one in self.words:
             if self.item.name == one.name:
@@ -296,6 +295,7 @@ class GUI(object):
     @init_close_db
     def add_to_xml(self):
         self.btn_add.config(state=tk.DISABLED)
+        self.words = init_list()
         if self.in_xml():  # strange duplicate items
             return
         # if add a word that is not in db now to xml, save it to db.
