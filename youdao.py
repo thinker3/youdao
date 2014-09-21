@@ -12,12 +12,13 @@ from utils import Status
 
 
 class Fetcher(threading.Thread):
+    time_out = 10
+    sleep_interval = 0.05
 
     def __init__(self, middle_queue, product_queue):
         threading.Thread.__init__(self)
         self.middle_queue = middle_queue
         self.product_queue = product_queue
-        self.sleep_interval = 0.05
 
     def run(self):
         while Status.running:
@@ -29,8 +30,8 @@ class Fetcher(threading.Thread):
 
     def get_html(self, url):
         try:
-            return urllib2.urlopen(url).read()
-            return requests.get(url).text
+            return urllib2.urlopen(url, timeout=self.time_out).read()
+            return requests.get(url, timeout=self.time_out).text
         except Exception as e:
             print type(e), e
             return ''
