@@ -21,6 +21,15 @@ elif sys.platform == 'linux2':
 else:
     title = 'Press win+z to search selected word'
 
+    import ctypes
+    win32 = ctypes.windll.kernel32
+    hin = win32.GetStdHandle(-10)
+    mode = ctypes.c_int(0)
+    win32.GetConsoleMode(hin, ctypes.byref(mode))
+    old_mode = mode.value
+    # disable Windows console(cmd.exe) quick edit mode
+    new_mode = old_mode & (~0x0040)
+
 
 class GUI(object):
     p = re.compile(r'\w{2,}')
@@ -343,12 +352,16 @@ class GUI(object):
             self.middle_queue.put(word)
 
     def close_handler(self):
+        if sys.platform == 'win32':
+            win32.SetConsoleMode(hin, old_mode)
         Status.running = False
         self.root.iconify()
         self.root.quit()
 
 
 if __name__ == '__main__':
+    if sys.platform == 'win32':
+        win32.SetConsoleMode(hin, new_mode)
     material_queue = Queue.Queue()
     middle_queue = Queue.Queue()
     product_queue = Queue.Queue()
