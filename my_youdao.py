@@ -20,15 +20,7 @@ elif sys.platform == 'linux2':
     title = 'Press left ctrl and left shift to search selected word'
 else:
     title = 'Press win+z to search selected word'
-
-    import ctypes
-    win32 = ctypes.windll.kernel32
-    hin = win32.GetStdHandle(-10)
-    mode = ctypes.c_int(0)
-    win32.GetConsoleMode(hin, ctypes.byref(mode))
-    old_mode = mode.value
-    # disable Windows console(cmd.exe) quick edit mode
-    new_mode = old_mode & (~0x0040)
+    from quick_edit_mode import win32, handle, old_mode, quick_edit
 
 
 class GUI(object):
@@ -353,7 +345,9 @@ class GUI(object):
 
     def close_handler(self):
         if sys.platform == 'win32':
-            win32.SetConsoleMode(hin, old_mode)
+            # enable Windows console(cmd.exe) quick edit mode
+            new_mode = old_mode | quick_edit
+            win32.SetConsoleMode(handle, new_mode)
         Status.running = False
         self.root.iconify()
         self.root.quit()
@@ -361,7 +355,9 @@ class GUI(object):
 
 if __name__ == '__main__':
     if sys.platform == 'win32':
-        win32.SetConsoleMode(hin, new_mode)
+        # disable Windows console(cmd.exe) quick edit mode
+        new_mode = old_mode & (~quick_edit)
+        win32.SetConsoleMode(handle, new_mode)
     material_queue = Queue.Queue()
     middle_queue = Queue.Queue()
     product_queue = Queue.Queue()
