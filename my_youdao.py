@@ -345,9 +345,13 @@ class GUI(object):
 
     def close_handler(self):
         if sys.platform == 'win32':
+            '''
             # enable Windows console(cmd.exe) quick edit mode
             new_mode = old_mode | quick_edit
             win32.SetConsoleMode(handle, new_mode)
+            '''
+            # respect individual preference
+            win32.SetConsoleMode(handle, old_mode)
         Status.running = False
         self.root.iconify()
         self.root.quit()
