@@ -1,4 +1,9 @@
 ; win: #, ctrl: ^, alt: !, shift: +
+;#SingleInstance ignore
+#SingleInstance force
+; test code
+;Msgbox hello
+
 #z::
 !z::
 +z::
