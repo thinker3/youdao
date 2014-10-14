@@ -1,7 +1,6 @@
 #coding=utf8
 
 import os
-import sys
 from datetime import datetime
 from lxml import etree
 #from scrapy.selector import Selector
@@ -27,8 +26,7 @@ def get_xml_db_path():
         db_in_sync = os.path.expanduser(YOUDAO_SYNC_PATH) + DB_FILE_NAME
         if os.path.exists(xml_in_sync) and os.path.exists(db_in_sync):
             return xml_in_sync, db_in_sync
-    else:
-        return abspath()
+    return abspath()
 
 xmlpath, dbpath = get_xml_db_path()
 
