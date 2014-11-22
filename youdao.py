@@ -10,6 +10,9 @@ from datetime import datetime
 from lxml_selector import Selector
 from utils import Status
 
+# disable http_proxy in urllib2
+urllib2.getproxies = lambda: {}
+
 
 class Fetcher(threading.Thread):
     time_out = 10
@@ -30,8 +33,13 @@ class Fetcher(threading.Thread):
 
     def get_html(self, url):
         try:
+            proxies = {
+                #'http': '',  # ok
+                'http': None,
+            }
+            # proxies={} or proxies=None not work
+            return requests.get(url, timeout=self.time_out, proxies=proxies).text
             return urllib2.urlopen(url, timeout=self.time_out).read()
-            return requests.get(url, timeout=self.time_out).text
         except Exception as e:
             print type(e), e
             return ''
@@ -47,7 +55,7 @@ class Fetcher(threading.Thread):
         time_fetching = after_fetching - before_fetching
         print
         print word
-        print datetime.strftime( before_fetching, '%Y/%m/%d %H:%M:%S')
+        print datetime.strftime(before_fetching, '%Y/%m/%d %H:%M:%S')
         print 'time_fetching %.2f' % time_fetching.total_seconds()
 
         hxs = Selector(text=html)
