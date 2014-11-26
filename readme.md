@@ -1,13 +1,11 @@
 youdao_like
 ========
 
-Press shortcut to search selected word, add words to recite. 
+Press shortcut to look up selected word, add words to wordbook to recite.
 
 I use it on Ubuntu, Mac, Windows.
 
 Ugly and a little bit hard to make it work the first time.
-
-It crashes sometimes.
 
 Data synchronization
 -------
@@ -59,4 +57,17 @@ run:
 
     python my_youdao.py
 
-shortcut: alt+z or win+z or shift+z, you can change it in selected.ahk 
+shortcut: alt+z or win+z or shift+z, you can change it in selected.ahk
+
+How I run it?
+-------
+
+I am customed to Windows console and terminals.
+
+I have a repository called [linux_settings](https://github.com/thinker3/linux_settings), it evolves to have settings for all platforms.
+
+On Windows: `qui<tab> yd`, to be clear: `quick_edit_mode.bat yd`.
+
+On Ubuntu: `yd`, an alias.
+
+Nothing special on Mac.
