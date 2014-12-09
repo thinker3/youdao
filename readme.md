@@ -64,7 +64,7 @@ How I run it?
 
 I am customed to Windows console and terminals.
 
-I have a repository called [linux_settings](https://github.com/thinker3/linux_settings), it evolves to have settings for all platforms.
+I have a repository called [os_settings](https://github.com/thinker3/os_settings)
 
 On Windows: `qui<tab> yd`, to be clear: `quick_edit_mode.bat yd`.
 
