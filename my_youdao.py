@@ -37,8 +37,8 @@ class GUI(object):
         self.root.title(title)
         self.root.protocol("WM_DELETE_WINDOW", self.close_handler)
         self.frame = tk.Frame(self.root)
-        self.frame.bind("<FocusIn>", self.focus_in)
-        self.frame.bind("<FocusOut>", self.focus_out)
+        #self.frame.bind("<FocusIn>", self.focus_in)
+        #self.frame.bind("<FocusOut>", self.focus_out)
         self.words = init_list()
         self.init_UI()
         self.frame.after(100, self.respond)
@@ -202,6 +202,7 @@ class GUI(object):
         word = self.name_string.get().strip()
         if word:
             self.material_queue.put(word)
+        self.focus_in_entry()
 
     def btn_recite_handler(self):
         if self.words:
