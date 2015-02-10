@@ -14,6 +14,7 @@ class Recite(object):
         self.window.title('Reciting')
         self.window.protocol("WM_DELETE_WINDOW", self.close_handler)
         self.frame = tk.Frame(self.window)
+        self.height = 10
         self.init_UI()
         self.run()
 
@@ -41,7 +42,7 @@ class Recite(object):
                                         command=self.show_phonetic)
         self.btn_show_phonetic.grid(row=1, column=1)
 
-        self.area_meaning = tk.Text(self.frame, height=5, width=80, wrap=tk.WORD)
+        self.area_meaning = tk.Text(self.frame, height=self.height, width=80, wrap=tk.WORD)
         self.area_meaning.grid(row=2)
         scroll_meaning = tk.Scrollbar(self.frame)
         scroll_meaning.grid(row=2, column=1, sticky=tk.N + tk.S)
@@ -93,6 +94,10 @@ class Recite(object):
         self.area_meaning.delete('1.0', tk.END)
         self.area_meaning.insert(tk.INSERT, self.item.convert().meaning)
 
+    @property
+    def length(self):
+        return len(self.words)
+
     def rearrange(self, right):
         if self.item != self.words[0]:  # to avoid multiple enter events
             return
@@ -104,15 +109,14 @@ class Recite(object):
             return
         # length >= 7
         if right:
-            index = None
-            for i, one in enumerate(self.words):
-                if one.score > self.item.score:
-                    index = i
+            index = self.length - 1
+            while index:
+                if self.item.score >= self.words[index].score:
                     break
-            # if not index: # when i==0, it may be not right
-            if index is None:
-                self.words.append(self.item)
-            elif index < 6:
+                else:
+                    index -= 1
+            index += 1
+            if index < 6:
                 self.words.insert(4, self.item)
             else:
                 self.words.insert(index, self.item)
@@ -148,7 +152,7 @@ class Flash(Recite):
         self.btn_no = tk.Button(self.frame, text="No", command=self.no)
         self.btn_del = tk.Button(self.frame, text="Delete", command=self.delete)
 
-        self.area_meaning = tk.Text(self.frame, height=10, width=80, wrap=tk.WORD)
+        self.area_meaning = tk.Text(self.frame, height=self.height, width=80, wrap=tk.WORD)
         self.scroll_meaning = tk.Scrollbar(self.frame)
         self.scroll_meaning.config(command=self.area_meaning.yview)
         self.area_meaning.configure(yscrollcommand=self.scroll_meaning.set)
