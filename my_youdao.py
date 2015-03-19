@@ -1,4 +1,5 @@
-# coding=utf8
+#!/usr/bin/env python
+# encoding: utf-8
 
 import os
 import re
@@ -37,6 +38,7 @@ class GUI(object):
         self.root.title(title)
         self.root.protocol("WM_DELETE_WINDOW", self.close_handler)
         self.frame = tk.Frame(self.root)
+        self.subFrame = None
         #self.frame.bind("<FocusIn>", self.focus_in)
         #self.frame.bind("<FocusOut>", self.focus_out)
         self.words = init_list()
@@ -188,13 +190,13 @@ class GUI(object):
 
     def create_recite_window(self):
         self.words = init_list()
-        self.app = Recite(self)
+        self.subFrame = Recite(self)
         self.btn_recite.config(state=tk.DISABLED)
         self.btn_flash.config(state=tk.DISABLED)
 
     def create_flash_window(self):
         self.words = init_list()
-        self.app = Flash(self)
+        self.subFrame = Flash(self)
         self.btn_recite.config(state=tk.DISABLED)
         self.btn_flash.config(state=tk.DISABLED)
 
@@ -353,6 +355,8 @@ class GUI(object):
             '''
             # respect individual preference
             win32.SetConsoleMode(handle, old_mode)
+        if self.subFrame:
+            self.subFrame.close_handler()
         Status.running = False
         self.root.iconify()
         self.root.quit()

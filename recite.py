@@ -1,4 +1,6 @@
-#coding=utf8
+#!/usr/bin/env python
+# encoding: utf-8
+
 import random
 import Tkinter as tk
 import tkMessageBox as mb
@@ -6,7 +8,6 @@ from utils import save_list
 
 
 class Recite(object):
-
     def __init__(self, master):
         self.master = master
         self.words = self.master.words
@@ -21,6 +22,7 @@ class Recite(object):
     def close_handler(self):
         save_list(self.words)
         self.window.destroy()
+        self.master.subFrame = None
         self.master.btn_recite_handler()
 
     def init_UI(self):
@@ -135,7 +137,6 @@ class Recite(object):
 
 
 class Flash(Recite):
-
     def __init__(self, master):
         super(Flash, self).__init__(master)
         self.window.title('Flashing')
