@@ -5,6 +5,7 @@ import os
 import re
 import sys
 import time
+import subprocess
 import Queue
 import peewee
 import wx
@@ -17,6 +18,7 @@ from action import Search, Recite, Flash
 
 if sys.platform == 'darwin':
     title = 'Press ctrl+cmd+z to search selected word'
+    #from Cocoa import NSRunningApplication, NSApplicationActivateIgnoringOtherApps
 elif sys.platform == 'linux2':
     title = 'Press left ctrl and left shift to search selected word'
 else:
@@ -81,6 +83,7 @@ class GUI(Search):
     def bind(self):
         self.entry_name.Bind(wx.EVT_KEY_UP, self.OnKeyUp)
         self.btn_save.Bind(wx.EVT_BUTTON, self.save_after_edit)
+        self.btn_lookup.Bind(wx.EVT_BUTTON, self.enter_handler)
         self.btn_add.Bind(wx.EVT_BUTTON, self.add_to_xml)
         self.btn_recite.Bind(wx.EVT_BUTTON, self.create_recite_window)
         self.btn_flash.Bind(wx.EVT_BUTTON, self.create_flash_window)
@@ -151,9 +154,35 @@ class GUI(Search):
         self.popup_and_focus()
 
     def popup_and_focus(self):
-        #print self.IsIconized()
-        self.Raise()
+        if sys.platform == 'darwin':
+            self.mac_raise(subproc=True)
+        else:
+            self.Show(True)
+            self.Raise()  # shake; tremble; vibrate
         self.focus_in_entry()
+
+    def mac_raise(self, subproc=False):
+        #nsapp = NSRunningApplication.runningApplicationWithProcessIdentifier_(os.getpid())
+        #nsapp.activateWithOptions_(NSApplicationActivateIgnoringOtherApps)
+        if self.IsIconized():
+            self.Iconize(False)
+        if subproc:
+            subprocess.Popen([
+                'osascript',
+                '-e',
+                '''
+                tell application "System Events"
+                set procName to name of first process whose unix id is %s
+                end tell
+                tell application procName to activate
+                ''' % os.getpid(),
+            ])
+        else:
+            long_cmd = (
+                """/usr/bin/osascript -e 'tell app "Finder" """
+                """to set frontmost of process "Python" to true'"""
+            )
+            os.system(long_cmd)
 
     def focus_in_entry(self):
         #self.entry_name.SetFocus()  # no need to set focus?

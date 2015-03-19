@@ -25,6 +25,7 @@ class SearchFrame(BaseFrame):
         self.area_meaning = wx.TextCtrl(self.panel, style=wx.TE_MULTILINE)
         self.area_example = wx.TextCtrl(self.panel, style=wx.TE_MULTILINE)
 
+        self.btn_lookup = wx.Button(self.panel, label="Lookup")
         self.btn_add = wx.Button(self.panel, label="Add")
         self.btn_add.Disable()
 
@@ -41,11 +42,11 @@ class SearchFrame(BaseFrame):
         hbox = wx.BoxSizer(wx.HORIZONTAL)
         grid = wx.FlexGridSizer(rows, cols, vgap, hgap)
         grid.AddMany([
-            (self.entry_name), (self.btn_add),
-            (self.label_phonetic), (self.btn_recite),
-            (self.area_meaning, 1, wx.EXPAND), (self.btn_flash),
-            (self.area_example, 1, wx.EXPAND), (self.btn_sort),
-            (self.btn_save),
+            (self.entry_name), (self.btn_lookup),
+            (self.label_phonetic), (self.btn_add),
+            (self.area_meaning, 1, wx.EXPAND), (self.btn_recite),
+            (self.area_example, 1, wx.EXPAND), (self.btn_flash),
+            (self.btn_save), (self.btn_sort),
         ])
         grid.AddGrowableCol(0, 1)
         grid.AddGrowableRow(2, 1)
