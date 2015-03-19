@@ -49,14 +49,12 @@ class Item(peewee.Model):
     class Meta:
         database = proxy_db
 
-    def getattr(self, attr):
-        return object.__getattribute__(self, attr)
-
-    def setattr(self, attr, value):
-        object.__setattr__(self, attr, value)
-
     def convert(self):
         return XmlItem(self.name)
+
+    @init_close_db
+    def to_unicode(self):
+        return self.__class__.get(name=self.name)
 
 
 if __name__ == '__main__':

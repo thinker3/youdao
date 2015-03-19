@@ -21,12 +21,12 @@ Installation:
 
 ### Ubuntu
 
-    sudo apt-get install python-dev xsel python-tk libxml2-dev libxslt1-dev
+    sudo apt-get install python-dev xsel python-wxgtk2.8 libxml2-dev libxslt1-dev
     sudo pip install -i http://pypi.douban.com/simple/ peewee requests lxml
 
 run:
 
-    python my_youdao.py &
+    python wx_youdao.py &
 
 shortcut: left ctrl + left shift
 
@@ -34,9 +34,10 @@ notes: GUI doesn't pop up if minimized.
 
 ### Mac
 
+    brew install wxpython
     sudo pip install -i http://pypi.douban.com/simple/ peewee requests lxml
 
-Add a service(with shortcut ctrl+shift+y) using Automator to run my_youdao.py
+Add a service(with shortcut ctrl+shift+y) using Automator to run wx_youdao.py
 
 Add a service(with shortcut ctrl+cmd+z) using Automator to run selected.py
 
@@ -55,7 +56,7 @@ Install third-party libraries:
 
 run:
 
-    python my_youdao.py
+    python wx_youdao.py
 
 shortcut: alt+z or win+z or shift+z, you can change it in selected.ahk
 

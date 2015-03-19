@@ -11,6 +11,7 @@ XML_FILE_NAME = 'wordbook.myxml'
 # Dropbox
 YOUDAO_SYNC_PATH = '~/nuts/youdao_db_xml/'  # endswith '/'
 #YOUDAO_SYNC_PATH = ''
+delta = 100
 
 
 def abspath():
