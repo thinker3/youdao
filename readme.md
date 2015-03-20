@@ -26,7 +26,7 @@ Installation:
 
 run:
 
-    python wx_youdao.py &
+    python my_youdao.py &
 
 shortcut: left ctrl + left shift
 
@@ -37,7 +37,7 @@ notes: GUI doesn't pop up if minimized.
     brew install wxpython
     sudo pip install -i http://pypi.douban.com/simple/ peewee requests lxml
 
-Add a service(with shortcut ctrl+shift+y) using Automator to run wx_youdao.py
+Add a service(with shortcut ctrl+shift+y) using Automator to run my_youdao.py or just run it in terminal
 
 Add a service(with shortcut ctrl+cmd+z) using Automator to run selected.py
 
@@ -56,7 +56,7 @@ Install third-party libraries:
 
 run:
 
-    python wx_youdao.py
+    python my_youdao.py
 
 shortcut: alt+z or win+z or shift+z, you can change it in selected.ahk
 

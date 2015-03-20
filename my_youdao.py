@@ -49,11 +49,12 @@ class GUI(Search):
         word_list = p.findall(word)
         if word_list:
             word = word_list[0].lower()
-            if self.previous != word:
-                self.previous = word
-            else:
-                print same_word_hint
-            self.search_word(word)
+            if len(word) >= 2:
+                if self.previous != word:
+                    self.previous = word
+                else:
+                    print same_word_hint
+                self.search_word(word)
 
     def respond(self):
         if not self.material_queue.empty():
@@ -156,9 +157,16 @@ class GUI(Search):
     def popup_and_focus(self):
         if sys.platform == 'darwin':
             self.mac_raise(subproc=True)
-        else:
+        elif sys.platform == 'linux2':
+            print self.IsIconized()  # always False
+            if self.IsIconized():
+                self.Iconize(False)
             self.Show(True)
-            self.Raise()  # shake; tremble; vibrate
+            self.Raise()
+        else:
+            if self.IsIconized():
+                self.Iconize(False)
+            self.Raise()
         self.focus_in_entry()
 
     def mac_raise(self, subproc=False):
@@ -183,6 +191,7 @@ class GUI(Search):
                 """to set frontmost of process "Python" to true'"""
             )
             os.system(long_cmd)
+        #self.Raise()  # shake; tremble; vibrate, not needed
 
     def focus_in_entry(self):
         #self.entry_name.SetFocus()  # no need to set focus?
