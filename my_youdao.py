@@ -158,16 +158,24 @@ class GUI(Search):
         if sys.platform == 'darwin':
             self.mac_raise(subproc=True)
         elif sys.platform == 'linux2':
-            print self.IsIconized()  # always False
-            if self.IsIconized():
-                self.Iconize(False)
-            self.Show(True)
-            self.Raise()
+            self.linux_raise()
         else:
             if self.IsIconized():
                 self.Iconize(False)
             self.Raise()
         self.focus_in_entry()
+
+    def linux_raise(self):
+        '''
+        print self.IsIconized()  # always False
+        if self.IsIconized():
+            self.Iconize(False)
+        self.Show(True)
+        self.Refresh()
+        self.Raise()
+        '''
+        command = 'wmctrl -a "%s"' % title  # or xdotool
+        os.system(command)
 
     def mac_raise(self, subproc=False):
         #nsapp = NSRunningApplication.runningApplicationWithProcessIdentifier_(os.getpid())
@@ -194,7 +202,7 @@ class GUI(Search):
         #self.Raise()  # shake; tremble; vibrate, not needed
 
     def focus_in_entry(self):
-        #self.entry_name.SetFocus()  # no need to set focus?
+        self.entry_name.SetFocus()  # no need to set focus? need
         #self.entry_name.SetSelection(0, -1)  # not works
         self.entry_name.SetSelection(-1, -1)
         #self.entry_name.SetInsertionPointEnd()

@@ -21,7 +21,7 @@ Installation:
 
 ### Ubuntu
 
-    sudo apt-get install python-dev xsel python-wxgtk2.8 libxml2-dev libxslt1-dev
+    sudo apt-get install python-dev xsel wmctrl python-wxgtk2.8 libxml2-dev libxslt1-dev
     sudo pip install -i http://pypi.douban.com/simple/ peewee requests lxml
 
 run:
