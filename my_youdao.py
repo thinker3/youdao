@@ -16,6 +16,7 @@ from utils import init_list, save_list, Status, delta
 from word_getter import WordGetter
 from action import Search, Recite, Flash
 
+HotKey = None
 if sys.platform == 'darwin':
     title = 'Press ctrl+cmd+z to search selected word'
     #from Cocoa import NSRunningApplication, NSApplicationActivateIgnoringOtherApps
@@ -23,6 +24,7 @@ elif sys.platform == 'linux2':
     title = 'Press left ctrl and left shift to search selected word'
 else:
     title = 'Press win+z to search selected word'
+    from hotkey import HotKey
     from quick_edit_mode import win32, handle, old_mode, quick_edit
 
 size = (800, 500)
@@ -44,6 +46,8 @@ class GUI(Search):
         self.words = init_list()
         self.bind()
         wx.CallLater(delta, self.respond)
+        if HotKey:
+            HotKey(self)
 
     def check_search_word(self, word):
         word_list = p.findall(word)
@@ -66,8 +70,12 @@ class GUI(Search):
         if not self.product_queue.empty():
             item_dict_or_str = self.product_queue.get()
             if isinstance(item_dict_or_str, dict):
-                item = self.save_item(item_dict_or_str)
-                self.item_queue.put(item.to_unicode())
+                # if no example, do not save to db, but if added to xml, save it to db.
+                if item_dict_or_str['example']:
+                    item = self.save_item(item_dict_or_str)
+                else:
+                    item = Item(**item_dict_or_str)
+                self.item_queue.put(item)
             else:
                 self.clear(item_dict_or_str)
         wx.CallLater(delta, self.respond)
@@ -107,7 +115,11 @@ class GUI(Search):
         if self.item:
             self.item.meaning = self.area_meaning.GetValue()
             self.item.example = self.area_example.GetValue()
-            self.item.save()
+            try:
+                self.item.save(force_insert=True)
+            except peewee.IntegrityError as e:
+                print type(e), e
+                self.item.save()
 
     def create_recite_window(self, e=None):
         self.words = init_list()
@@ -254,15 +266,12 @@ class GUI(Search):
 
     @init_close_db
     def save_item(self, item_dict):
-        # if no example, do not save to db, but if added to xml, save it to db.
-        if item_dict['example']:
-            try:
-                item = Item.create(**item_dict)
-            except peewee.IntegrityError as e:
-                print type(e), e
-                item = self.query_db(item_dict['name'])
-        else:
-            item = Item(**item_dict)
+        try:
+            item = Item.create(**item_dict)
+            item = item.to_unicode()
+        except peewee.IntegrityError as e:
+            print type(e), e
+            item = self.query_db(item_dict['name'])
         return item
 
     def search_word(self, word):
