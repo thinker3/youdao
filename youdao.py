@@ -56,7 +56,10 @@ class Fetcher(threading.Thread):
         print
         print word
         print datetime.strftime(before_fetching, '%Y/%m/%d %H:%M:%S')
-        print 'time_fetching %.2f' % time_fetching.total_seconds()
+        try:
+            print 'time_fetching %.2f' % time_fetching.total_seconds()
+        except:
+            print 'time_fetching %.2f' % time_fetching.seconds
 
         hxs = Selector(text=html)
         phonetics = hxs.xpath('//div[@id="phrsListTab"]/h2[1]/div[1]/span')
