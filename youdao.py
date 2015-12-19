@@ -114,7 +114,11 @@ if __name__ == '__main__':
     product_queue = Queue.Queue()
     Fetcher(middle_queue, product_queue).start()
     while True:
-        word = raw_input('q to quit, input the word: ').strip()
+        try:
+            word = raw_input('q to quit, input the word: ').strip()
+        except KeyboardInterrupt:
+            print
+            word = 'q'
         if word.lower() == 'q':
             Status.running = False
             break
