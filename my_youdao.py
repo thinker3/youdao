@@ -52,7 +52,7 @@ class GUI(Search):
     def check_search_word(self, word):
         word_list = p.findall(word)
         if word_list:
-            word = word_list[0].lower()
+            word = ' '.join(word_list).lower()
             if len(word) >= 2:
                 if self.previous != word:
                     self.previous = word
