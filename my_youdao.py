@@ -2,7 +2,6 @@
 # coding=utf8
 
 import os
-import re
 import sys
 import time
 import subprocess
@@ -11,7 +10,7 @@ import peewee
 import wx
 
 from youdao import Fetcher
-from models import Item, init_close_db
+from models import Word, Item, init_close_db
 from utils import init_list, save_list, Status, delta
 from word_getter import WordGetter
 from action import Search, Recite, Flash
@@ -28,7 +27,6 @@ else:
     from quick_edit_mode import win32, handle, old_mode, quick_edit
 
 size = (800, 500)
-p = re.compile(r'\w{2,}')
 same_word_hint = 'same word ?'
 
 
@@ -36,10 +34,10 @@ class GUI(Search):
     previous = ''
     item = None
 
-    def __init__(self, material_queue, middle_queue, product_queue):
+    def __init__(self, material_queue, word_queue, product_queue):
         super(GUI, self).__init__(None, title, size)
         self.material_queue = material_queue
-        self.middle_queue = middle_queue
+        self.word_queue = word_queue
         self.product_queue = product_queue
         self.item_queue = Queue.Queue()
         self.Bind(wx.EVT_CLOSE, self.close_handler)
@@ -50,15 +48,15 @@ class GUI(Search):
             HotKey(self)
 
     def check_search_word(self, word):
-        word_list = p.findall(word)
-        if word_list:
-            word = ' '.join(word_list).lower()
-            if len(word) >= 2:
-                if self.previous != word:
-                    self.previous = word
-                else:
-                    print same_word_hint
-                self.search_word(word)
+        word = Word(word)
+        if word.is_valid:
+            if self.previous != word.value:
+                self.previous = word.value
+            else:
+                print same_word_hint
+            self.search_word(word)
+        else:
+            self.clear(word, 'Invalid word.')
 
     def respond(self):
         if not self.material_queue.empty():
@@ -68,7 +66,7 @@ class GUI(Search):
             self.item = self.item_queue.get()
             self.show_in_gui()
         if not self.product_queue.empty():
-            item_dict_or_str = self.product_queue.get()
+            word, item_dict_or_str = self.product_queue.get()
             if isinstance(item_dict_or_str, dict):
                 # if no example, do not save to db, but if added to xml, save it to db.
                 if item_dict_or_str['example']:
@@ -77,7 +75,7 @@ class GUI(Search):
                     item = Item(**item_dict_or_str)
                 self.item_queue.put(item)
             else:
-                self.clear(item_dict_or_str)
+                self.clear(word, item_dict_or_str)
         wx.CallLater(delta, self.respond)
 
     def center(self):
@@ -219,9 +217,10 @@ class GUI(Search):
         self.entry_name.SetSelection(-1, -1)
         #self.entry_name.SetInsertionPointEnd()
 
-    def clear(self, meaning=''):
-        self.entry_name.SetValue(self.previous)
-        self.label_phonetic.SetLabel('No such word or web failure.')
+    def clear(self, word, meaning):
+        meaning = meaning or 'No such word or web failure.'
+        self.entry_name.SetValue(word.value)
+        self.label_phonetic.SetLabel('')
         self.area_meaning.SetValue(meaning)
         self.area_example.SetValue('')
         self.btn_add.Disable()
@@ -275,11 +274,14 @@ class GUI(Search):
         return item
 
     def search_word(self, word):
-        item = self.query_db(word)
-        if item:
-            self.item_queue.put(item)
+        if word.lang == 'cn':
+            self.word_queue.put(word)
         else:
-            self.middle_queue.put(word)
+            item = self.query_db(word.value)
+            if item:
+                self.item_queue.put(item)
+            else:
+                self.word_queue.put(word)
 
     def close_handler(self, e=None):
         if sys.platform == 'win32':
@@ -300,10 +302,10 @@ if __name__ == '__main__':
         new_mode = old_mode & (~quick_edit)
         win32.SetConsoleMode(handle, new_mode)
     material_queue = Queue.Queue()
-    middle_queue = Queue.Queue()
+    word_queue = Queue.Queue()
     product_queue = Queue.Queue()
     WordGetter(material_queue).start()
-    Fetcher(middle_queue, product_queue).start()
+    Fetcher(word_queue, product_queue).start()
     app = wx.App()
-    GUI(material_queue, middle_queue, product_queue)
+    GUI(material_queue, word_queue, product_queue)
     app.MainLoop()

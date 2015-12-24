@@ -1,9 +1,11 @@
 #coding=utf8
 
+import re
 from datetime import datetime
 import peewee
 from utils import dbpath
 
+p = re.compile(r'\w+')
 proxy_db = peewee.Proxy()
 
 
@@ -20,6 +22,21 @@ def init_close_db(old_func):
         proxy_db.initialize(None)
         return r
     return new_func
+
+
+class Word():
+    def __init__(self, word):
+        word_list = p.findall(word)
+        if word_list:
+            self.lang = 'en'
+            self.value = ' '.join(word_list).lower()
+            self.is_valid = len(self.value) >= 2
+        else:
+            self.lang = 'cn'
+            self.value = word.strip()
+            self.is_valid = len(self.value) >= 1
+        if not self.is_valid:
+            self.value = word
 
 
 class XmlItem(object):

@@ -9,6 +9,7 @@ from datetime import datetime
 #from scrapy.selector import Selector
 from lxml_selector import Selector
 from utils import Status
+from models import Word
 
 # disable http_proxy in urllib2
 urllib2.getproxies = lambda: {}
@@ -18,18 +19,18 @@ class Fetcher(threading.Thread):
     time_out = 10
     sleep_interval = 0.05
 
-    def __init__(self, middle_queue, product_queue):
+    def __init__(self, word_queue, product_queue):
         threading.Thread.__init__(self)
-        self.middle_queue = middle_queue
+        self.word_queue = word_queue
         self.product_queue = product_queue
 
     def run(self):
         while Status.running:
             time.sleep(self.sleep_interval)
-            if not self.middle_queue.empty():
-                word = self.middle_queue.get()
-                dict_possible = self.query(word)
-                self.product_queue.put(dict_possible)
+            if not self.word_queue.empty():
+                self.word = self.word_queue.get()
+                dict_possible = self.query()
+                self.product_queue.put((self.word, dict_possible))
 
     def get_html(self, url):
         try:
@@ -44,9 +45,9 @@ class Fetcher(threading.Thread):
             print type(e), e
             return ''
 
-    def query(self, word):
-        url = "http://dict.youdao.com/search?tab=chn&keyfrom=dict.top&q="
-        url += word
+    def query(self):
+        url = "http://dict.youdao.com/search?q="
+        url += self.word.value
         before_fetching = datetime.now()
         html = self.get_html(url)
         if not html:
@@ -54,14 +55,29 @@ class Fetcher(threading.Thread):
         after_fetching = datetime.now()
         time_fetching = after_fetching - before_fetching
         print
-        print word
+        print self.word.value
         print datetime.strftime(before_fetching, '%Y/%m/%d %H:%M:%S')
         try:
             print 'time_fetching %.2f' % time_fetching.total_seconds()
         except:
             print 'time_fetching %.2f' % time_fetching.seconds
-
         hxs = Selector(text=html)
+        if self.word.lang == 'cn':
+            return self.query_cn(hxs)
+        else:
+            return self.query_en(hxs)
+
+    def query_cn(self, hxs):
+        en = []
+        ps = hxs.xpath('//div[@id="phrsListTab"]/div[@class="trans-container"]/ul/p[@class="wordGroup"]')
+        for p in ps:
+            text = p.xpath('./span[@class="contentTitle"]/*[self::a or self::span]/text()').extract()
+            if text:
+                text = ' '.join(text).split(';')
+                en.extend(map(str.strip, text))
+        return '\n'.join(en)
+
+    def query_en(self, hxs):
         phonetics = hxs.xpath('//div[@id="phrsListTab"]/h2[1]/div[1]/span')
         phonetic = ''
         for ph in phonetics:
@@ -77,7 +93,7 @@ class Fetcher(threading.Thread):
                 temp_meaning = li.xpath('./text()').extract()[0] + '\n'
             except:
                 temp_meaning = ''
-            if word.capitalize() in temp_meaning and u'人名' in temp_meaning:
+            if self.word.value.capitalize() in temp_meaning and u'人名' in temp_meaning:
                 continue
             else:
                 meaning += temp_meaning
@@ -102,7 +118,7 @@ class Fetcher(threading.Thread):
                 possible = ''
             return possible
         item_dict = {}
-        item_dict['name'] = word
+        item_dict['name'] = self.word.value
         item_dict['phonetic'] = phonetic.encode('utf8')
         item_dict['meaning'] = meaning.encode('utf8')
         item_dict['example'] = example.encode('utf8')
@@ -110,9 +126,9 @@ class Fetcher(threading.Thread):
 
 
 if __name__ == '__main__':
-    middle_queue = Queue.Queue()
+    word_queue = Queue.Queue()
     product_queue = Queue.Queue()
-    Fetcher(middle_queue, product_queue).start()
+    Fetcher(word_queue, product_queue).start()
     while True:
         try:
             word = raw_input('q to quit, input the word: ').strip()
@@ -122,14 +138,15 @@ if __name__ == '__main__':
         if word.lower() == 'q':
             Status.running = False
             break
-        if word:
-            middle_queue.put(word)
+        word = Word(word)
+        if word.is_valid:
+            word_queue.put(word)
             while True:
                 if not product_queue.empty():
-                    dict_possible = product_queue.get()
+                    word, dict_possible = product_queue.get()
                     if isinstance(dict_possible, dict):
                         for k, v in dict_possible.items():
                             print v
                     else:
-                        print dict_possible
+                        print '\n' + dict_possible + '\n'
                     break
