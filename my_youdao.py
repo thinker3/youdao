@@ -11,7 +11,7 @@ import wx
 
 from youdao import Fetcher
 from models import Word, Item, init_close_db
-from utils import init_list, save_list, Status, delta
+from utils import init_list, save_list, Status, delta, get_url
 from word_getter import WordGetter
 from action import Search, Recite, Flash
 
@@ -222,7 +222,7 @@ class GUI(Search):
         self.entry_name.SetValue(word.value)
         self.label_phonetic.SetLabel('')
         self.area_meaning.SetValue(meaning)
-        self.area_example.SetValue('')
+        self.area_example.SetValue(get_url(word.value))
         self.btn_add.Disable()
         self.btn_save.Disable()
         self.popup_and_focus()

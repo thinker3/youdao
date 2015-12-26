@@ -8,7 +8,7 @@ import threading
 from datetime import datetime
 #from scrapy.selector import Selector
 from lxml_selector import Selector
-from utils import Status
+from utils import Status, get_url
 from models import Word
 
 # disable http_proxy in urllib2
@@ -46,10 +46,8 @@ class Fetcher(threading.Thread):
             return ''
 
     def query(self):
-        url = "http://dict.youdao.com/search?q="
-        url += self.word.value
         before_fetching = datetime.now()
-        html = self.get_html(url)
+        html = self.get_html(get_url(self.word.value))
         if not html:
             return ''
         after_fetching = datetime.now()

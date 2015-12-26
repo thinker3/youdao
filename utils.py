@@ -12,6 +12,7 @@ XML_FILE_NAME = 'wordbook.myxml'
 YOUDAO_SYNC_PATH = '~/nuts/youdao_db_xml/'  # endswith '/'
 #YOUDAO_SYNC_PATH = ''
 delta = 100
+search_url = "http://dict.youdao.com/search?q="
 
 
 def abspath():
@@ -93,6 +94,10 @@ def save_list(items):
 
 class Status(object):
     running = True
+
+
+def get_url(word):
+    return search_url + word
 
 
 if __name__ == '__main__':
