@@ -2,13 +2,10 @@
 # encoding: utf-8
 
 import os
-import sys
 import time
-import random
 import queue
+import random
 import threading
-if sys.platform == 'linux2':
-    from keylogger import fetch_keys
 
 from utils import Status
 
@@ -21,7 +18,6 @@ sleep_interval = 0.05  # 0.5 is not responsive on linux2
 
 
 class WordGetter(threading.Thread):
-
     def __init__(self, queue=None, is_test=False):
         threading.Thread.__init__(self)
         self.queue = queue
@@ -30,18 +26,7 @@ class WordGetter(threading.Thread):
     def run(self):
         while Status.running:
             time.sleep(sleep_interval)
-            if sys.platform == 'linux2':
-                self.fetch_word()
-            else:
-                self.read_word()
-
-    def fetch_word(self):
-        changed, modifiers, keys = fetch_keys()
-        if changed:
-            if modifiers['left ctrl'] and modifiers['left shift']:
-                word = os.popen('xsel').read().strip()
-                if word:
-                    self.put_or_print_or_quit(word)
+            self.read_word()
 
     def read_word(self):
         if os.path.exists(word_path):

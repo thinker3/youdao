@@ -2,12 +2,12 @@
 # coding=utf8
 
 import os
-import sys
 import time
-import subprocess
 import queue
-import peewee
+import subprocess
+
 import wx
+import peewee
 
 from youdao import Fetcher
 from models import Word, Item, init_close_db
@@ -15,19 +15,9 @@ from utils import init_list, save_list, Status, delta, get_url
 from word_getter import WordGetter
 from action import Search, Recite, Flash
 
-HotKey = None
-if sys.platform == 'darwin':
-    title = 'Press ctrl+cmd+z to search selected word'
-    #from Cocoa import NSRunningApplication, NSApplicationActivateIgnoringOtherApps
-elif sys.platform == 'linux2':
-    title = 'Press left ctrl and left shift to search selected word'
-else:
-    title = 'Press win+z to search selected word'
-    from hotkey import HotKey
-    from quick_edit_mode import win32, handle, old_mode, quick_edit
-
 size = (800, 500)
 same_word_hint = 'same word ?'
+title = 'Press ctrl+cmd+z to search selected word'
 
 
 class GUI(Search):
@@ -44,8 +34,6 @@ class GUI(Search):
         self.words = init_list()
         self.bind()
         wx.CallLater(delta, self.respond)
-        if HotKey:
-            HotKey(self)
 
     def check_search_word(self, word):
         word = Word(word)
@@ -165,27 +153,8 @@ class GUI(Search):
         self.popup_and_focus()
 
     def popup_and_focus(self):
-        if sys.platform == 'darwin':
-            self.mac_raise(subproc=True)
-        elif sys.platform == 'linux2':
-            self.linux_raise()
-        else:
-            if self.IsIconized():
-                self.Iconize(False)
-            self.Raise()
+        self.mac_raise(subproc=True)
         self.focus_in_entry()
-
-    def linux_raise(self):
-        '''
-        print self.IsIconized()  # always False
-        if self.IsIconized():
-            self.Iconize(False)
-        self.Show(True)
-        self.Refresh()
-        self.Raise()
-        '''
-        command = 'wmctrl -a "%s"' % title  # or xdotool
-        os.system(command)
 
     def mac_raise(self, subproc=False):
         #nsapp = NSRunningApplication.runningApplicationWithProcessIdentifier_(os.getpid())
@@ -284,24 +253,12 @@ class GUI(Search):
                 self.word_queue.put(word)
 
     def close_handler(self, e=None):
-        if sys.platform == 'win32':
-            '''
-            # enable Windows console(cmd.exe) quick edit mode
-            new_mode = old_mode | quick_edit
-            win32.SetConsoleMode(handle, new_mode)
-            '''
-            # respect individual preference
-            win32.SetConsoleMode(handle, old_mode)
         Status.running = False
         self.Hide()
         self.Destroy()
 
 
 if __name__ == '__main__':
-    if sys.platform == 'win32':
-        # disable Windows console(cmd.exe) quick edit mode
-        new_mode = old_mode & (~quick_edit)
-        win32.SetConsoleMode(handle, new_mode)
     material_queue = queue.Queue()
     word_queue = queue.Queue()
     product_queue = queue.Queue()
