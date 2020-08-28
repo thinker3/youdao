@@ -124,6 +124,6 @@ class SecondaryFrame(BaseFrame):
     def choose(self):
         index = random.randint(len(self.words) / 2, len(self.words) - 1)
         choosed = self.words.pop(index)
-        print 'choosing %s, length is %d, index is %d, score is %d' % (
-            choosed.name, len(self.words), index, choosed.score)
+        print('choosing %s, length is %d, index is %d, score is %d' % (
+            choosed.name, len(self.words), index, choosed.score))
         self.words.insert(0, choosed)

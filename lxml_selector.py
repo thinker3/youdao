@@ -2,7 +2,7 @@
 # encoding: utf-8
 
 
-import urllib2
+import urllib.request, urllib.error, urllib.parse  # noqa
 import requests
 from lxml import etree
 from lxml.html import tostring
@@ -22,7 +22,7 @@ class Selector(object):
             self.tree = etree.HTML(self.html)
 
     def get_html_by_urllib2(self):
-        self.html = urllib2.urlopen(self.url).read()
+        self.html = urllib.request.urlopen(self.url).read()
 
     def get_html_by_requests(self):
         self.html = requests.get(self.url).text
@@ -42,22 +42,8 @@ class Selector(object):
         if hasattr(self.tree, 'text'):
             return self.tree.text
         return tostring(self.tree)
-    
-    '''
-    def __str__(self):
-        pass
-    '''
 
 
 class SelectorList(list):
-
-    '''
-    def __getslice__(self, i, j):
-        return self.__class__(list.__getslice__(self, i, j))
-
-    def xpath(self, xpath):
-        return self.__class__(flatten([x.xpath(xpath) for x in self]))
-    '''
-
     def extract(self):
         return [x.extract() for x in self]

@@ -47,7 +47,7 @@ class HotKey(object):
         try:
             text = win32clipboard.GetClipboardData()
         except TypeError as e:
-            print e
+            print(e)
             text = ''
         finally:
             win32clipboard.CloseClipboard()
@@ -61,6 +61,6 @@ class HotKey(object):
         try:
             win32clipboard.SetClipboardText(text)
         except TypeError as e:
-            print e
+            print(e)
         finally:
             win32clipboard.CloseClipboard()

@@ -5,7 +5,7 @@ import os
 import sys
 import time
 import subprocess
-import Queue
+import queue
 import peewee
 import wx
 
@@ -39,7 +39,7 @@ class GUI(Search):
         self.material_queue = material_queue
         self.word_queue = word_queue
         self.product_queue = product_queue
-        self.item_queue = Queue.Queue()
+        self.item_queue = queue.Queue()
         self.Bind(wx.EVT_CLOSE, self.close_handler)
         self.words = init_list()
         self.bind()
@@ -53,7 +53,7 @@ class GUI(Search):
             if self.previous != word.value:
                 self.previous = word.value
             else:
-                print same_word_hint
+                print(same_word_hint)
             self.search_word(word)
         else:
             self.clear(word, 'Invalid word.')
@@ -109,14 +109,14 @@ class GUI(Search):
         self.btn_sort.Enable()
 
     @init_close_db
-    def save_after_edit(self, e=None):
+    def save_after_edit(self, event=None):
         if self.item:
             self.item.meaning = self.area_meaning.GetValue()
             self.item.example = self.area_example.GetValue()
             try:
                 self.item.save(force_insert=True)
             except peewee.IntegrityError as e:
-                print type(e), e
+                print(type(e), e)
                 self.item.save()
 
     def create_recite_window(self, e=None):
@@ -235,7 +235,7 @@ class GUI(Search):
         return False
 
     @init_close_db
-    def add_to_xml(self, e=None):
+    def add_to_xml(self, event=None):
         self.btn_add.Disable()
         self.words = init_list()
         if self.in_xml():  # strange duplicate items
@@ -243,7 +243,7 @@ class GUI(Search):
         # if add a word that is not in db now to xml, save it to db.
         try:
             temp = Item.get(name=self.item.name)
-        except:
+        except Exception:
             temp = None
         if not temp:
             self.item.save(force_insert=True)  # only save() not save to db
@@ -254,13 +254,13 @@ class GUI(Search):
                 self.words.insert(0, self.item.convert())
             save_list(self.words)
         except Exception as e:
-            print e
+            print(e)
 
     @init_close_db
     def query_db(self, word):
         try:
             return Item.get(name=word)
-        except:
+        except Exception:
             return None
 
     @init_close_db
@@ -269,7 +269,7 @@ class GUI(Search):
             item = Item.create(**item_dict)
             item = item.to_unicode()
         except peewee.IntegrityError as e:
-            print type(e), e
+            print(type(e), e)
             item = self.query_db(item_dict['name'])
         return item
 
@@ -296,14 +296,15 @@ class GUI(Search):
         self.Hide()
         self.Destroy()
 
+
 if __name__ == '__main__':
     if sys.platform == 'win32':
         # disable Windows console(cmd.exe) quick edit mode
         new_mode = old_mode & (~quick_edit)
         win32.SetConsoleMode(handle, new_mode)
-    material_queue = Queue.Queue()
-    word_queue = Queue.Queue()
-    product_queue = Queue.Queue()
+    material_queue = queue.Queue()
+    word_queue = queue.Queue()
+    product_queue = queue.Queue()
     WordGetter(material_queue).start()
     Fetcher(word_queue, product_queue).start()
     app = wx.App()

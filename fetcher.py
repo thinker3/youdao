@@ -14,6 +14,14 @@ from models import Word
 urllib.request.getproxies = lambda: {}
 
 
+class Manager(object):
+    def __init__(self):
+        pass
+
+    def fetch(self, word):
+        Fetcher(word).start()
+
+
 class Fetcher(threading.Thread):
     time_out = 10
     sleep_interval = 0.05

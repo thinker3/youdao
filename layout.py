@@ -62,11 +62,10 @@ class SearchFrame(BaseFrame):
 
     def highlight(self, name):
         # todo
-        print 'highlight'
+        print('highlight')
 
 
 class ReciteFrame(SecondaryFrame):
-
     def __init__(self, parent, title, size):
         super(ReciteFrame, self).__init__(parent, title, size)
         self.Show()

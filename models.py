@@ -11,12 +11,7 @@ proxy_db = peewee.Proxy()
 
 def init_close_db(old_func):
     def new_func(*args, **kwargs):
-        # the db file can't be accessed by others
-        #db = peewee.SqliteDatabase(dbpath, check_same_thread=True)
-        #db = peewee.SqliteDatabase(dbpath, check_same_thread=False)
-        #db = peewee.SqliteDatabase(dbpath, threadlocals=False)
-        # OK, together with this proxy
-        db = peewee.SqliteDatabase(dbpath, threadlocals=True)
+        db = peewee.SqliteDatabase(dbpath)
         proxy_db.initialize(db)
         r = old_func(*args, **kwargs)
         proxy_db.initialize(None)
@@ -53,8 +48,8 @@ class XmlItem(object):
     def convert(self):
         try:
             return Item.get(name=self.name)
-        except:
-            print "The word [%s] is in xml but not in db." % self.name
+        except Exception:
+            print("The word [%s] is in xml but not in db." % self.name)
 
 
 class Item(peewee.Model):

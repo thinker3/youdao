@@ -30,6 +30,7 @@ def get_xml_db_path():
             return xml_in_sync, db_in_sync
     return abspath()
 
+
 xmlpath, dbpath = get_xml_db_path()
 
 
@@ -39,12 +40,12 @@ def init_list():
     try:
         f = open(xmlpath, 'r')
         xml = f.read()
-    except:
+    except Exception:
         xml = ''
     finally:
         try:
             f.close()
-        except:
+        except Exception:
             pass
     if not xml:
         return temp
@@ -88,7 +89,7 @@ def save_list(items):
     # encoding is important
     s = etree.tostring(wordbook, pretty_print=True, encoding='utf8')
     f = open(xmlpath, 'w')
-    f.write(s)
+    f.write(s.decode('utf8'))
     f.close()
 
 

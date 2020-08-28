@@ -5,7 +5,7 @@ import os
 import sys
 import time
 import random
-import Queue
+import queue
 import threading
 if sys.platform == 'linux2':
     from keylogger import fetch_keys
@@ -50,8 +50,8 @@ class WordGetter(threading.Thread):
             f.close()
             try:
                 os.remove(word_path)
-            except WindowsError as e:
-                print type(e), e
+            except Exception as e:
+                print(type(e), e)
                 time.sleep(0.2)
                 self.read_word()
             else:
@@ -60,19 +60,19 @@ class WordGetter(threading.Thread):
 
     def put_or_print_or_quit(self, word):
         if word == 'q' and self.is_test:
-            print 'quit'
+            print('quit')
             Status.running = False
         elif self.queue:
             self.queue.put(word)
             if self.is_test:
-                print self.queue.get()
+                print(self.queue.get())
         else:
-            print word
+            print(word)
 
 
 if __name__ == '__main__':
     #getter = WordGetter(is_test=True)
-    getter = WordGetter(queue=Queue.Queue(), is_test=True)
+    getter = WordGetter(queue=queue.Queue(), is_test=True)
     getter.start()
     while Status.running:
         try:
